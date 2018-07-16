@@ -62,7 +62,7 @@ cat $DIR/parallel_scripts/remapping.sh | parallel -j 20
 
 mkdir -p $DIR/cdhit_clustering/master_otus/../R/../combined_seqs
 python $SCRIPTS/renaming_seq_w_short_sample_name.py $DIR/cdhit_clustering/combined_seqs/sample_filename_map.txt $DIR/cdhit_clustering/combined_seqs/sequence_name_map.txt $DIR/quality_check/final_seqs/*_finalized.fa > $DIR/cdhit_clustering/combined_seqs/all_sequences.fa
-cd-hit-est -i $DIR/cdhit_clustering/combined_seqs/all_sequences.fa -o $DIR/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta -c 0.95 -M 200000 -T 20
+cd-hit-est -i $DIR/cdhit_clustering/combined_seqs/all_sequences.fa -o $DIR/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta -c 0.97 -M 200000 -T 20
 python $SCRIPTS/cdhit_clstr_to_otu.py $DIR/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta.clstr > $DIR/cdhit_clustering/master_otus/cdhit_otu_table_long.txt
 Rscript $SCRIPTS/convert_otu_table_long_to_wide_format.R $DIR/cdhit_clustering/master_otus/cdhit_otu_table_long.txt $DIR/cdhit_clustering/R/cdhit_otu_table_wide.txt
 
