@@ -20,7 +20,7 @@ CORES=2
 
 mkdir -p $DIR/cdhit_clustering/master_otus/../R/../combined_seqs
 
-cat reads/* > cdhit_clustering_97/combined_seqs/all_sequences.fa
+cat $DIR/reads/* > $DIR/cdhit_clustering/combined_seqs/all_sequences.fa
 
 cd-hit-est -i $DIR/cdhit_clustering/combined_seqs/all_sequences.fa -o $DIR/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta -c 0.97 -M 200000 -T 20
 
