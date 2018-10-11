@@ -1,0 +1,22 @@
+name: "16s Amplicon Pipeline"
+output_dir: "site"
+navbar:
+  title: "16s Amplicon Pipeline"
+  type: inverse
+  left:
+    - text: "Overview"
+      href: index.html
+
+      
+output:
+  html_document:
+    lib_dir: site_libs
+    theme: cerulean
+    highlight: textmate
+    include:
+      after_body: misc/footer.html
+    css: misc/styles.css
+    toc: true
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
