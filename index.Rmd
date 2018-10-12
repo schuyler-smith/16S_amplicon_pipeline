@@ -1,36 +1,11 @@
 ---
 title: "16s Amplicon Pipeline"
 ---
-**Downloads**: [R][R] and [RStudio][RS]
+**Downloads**: [R][R] - [Python][Py] - [parallel][gnupar] - [RDP][rdp] - [cd-hit][cdhit]
 
-# Why R?
+# Why use this pipeline?
 
-[What is R?][Rwhat]
-
-Essentially, R is a language that was made to handle complex statistics, working with vectors and data frames. The strength of R over other languages lies in its statistics, linear algebra, and especially its ability to make graphs and figures.
-
-[Rwhat]:https://www.r-project.org/about.html
-
-#### But I always hear about how great Python is.
-
-Yes, [Python][Py] is a beautiful language that strikes an amazing balance between syntax and power. With the frequent release of new packages for both R and Python the overlap in function is becoming greater. However, for now R still has the upper-hand when it comes to math, statistics, and graphs.
-
-> I fear not the man who has practiced 10,000 kicks once, but I fear the man who has practiced one kick 10,000 times. - Bruce Lee
-
-There is a lot of truth to this. My recommendation is to find which is most useful and comfortable language for you and spend time mastering that one. For a lot of scientists, this tends to be R. But there is certainly a lot of practicality in being familiar and comfortable with multiple languages.
-
-[Py]:https://www.python.org/
-
-# Inital Setup
-
-To work through this tutorial you will need to download and install the latest version of [R][R] from the [CRAN][R] website.
-
-Additionally, but not necessary, [RStudio][RS] is a nice program that runs R and makes many things easier for users, particularly saving and opening files and figures.
-
-And now we are ready to get started!
-
-[R]:https://mirror.las.iastate.edu/CRAN/
-[RS]:https://www.rstudio.com/products/rstudio/download/#download
+There are several complete pipelines that are well maintained and coumented; the two most popular being [Mothur][mothur] and [Qiime][qiime]. Mothur runs in its own environment. It has linear workflows and does not allow you to change the input/output file names. This can be confusing for users interested in intermediate steps of the workflow. Qiime is better about this. It is run using Python and this workflow will borrow some of its scripts.
 
 # [Exercise 1 - Getting Started][Ex1]
 
@@ -45,55 +20,21 @@ And now we are ready to get started!
   + [**Loops**](exercise_1.html#loops)
   + [**Packages**](exercise_1.html#packages)
 
-# [Exercise 2 - Data-Structures][Ex2]
-
-  + [**Data Types (atomic classes)**](exercise_2.html#data_types_(atomic_classes))
-  + [**Numeric Data**](exercise_2.html#numeric_data)
-  + [**Character Data**](exercise_2.html#character_data)
-  + [**Logical Data**](exercise_2.html#logical_data)
-  + [**Vector**](exercise_2.html#vector)
-  + [**List**](exercise_2.html#list)
-  + [**Matrix**](exercise_2.html#matrix)
-  + [**Array**](exercise_2.html#array)
-  + [**Data Frame**](exercise_2.html#data_frame)
-  + [**Table**](exercise_2.html#table)
-
-# [Exercise 3 - Writing Scripts][Ex3]
-
-  + [**R Files**](exercise_3.html#dr_files)
-  + [**Data**](exercise_3.html#data)
-  + [**Working Directory**](exercise_3.html#working_directory)
-  + [**Writing Scripts**](exercise_3.html#writing_scripts)
-  + [**Loading Data**](exercise_3.html#loading_data)
-  + [**Combining Files**](exercise_3.html#combining_files)
-  + [**Saving Files**](exercise_3.html#saving_files)
-  + [**Functions**](exercise_3.html#functions)
-  + [**Loops**](exercise_3.html#loops)
-  + [**Apply**](exercise_3.html#apply)
-  + [**Subsetting Data**](exercise_3.html#subsetting_data)
-
-# [Exercise 4 - Graphing Data][Ex4]
-
-  + [**Plotting**](exercise_4.html#plotting)
-  + [**Geometric Layers**](exercise_4.html#geometric_layers)
-  + [**Colors in R**](exercise_4.html#colors_in_r)
-  + [**Aesthetics and Colors**](exercise_4.html#aesthetics_and_colors)
-  + [**Facets**](exercise_4.html#facets)
-  + [**Labels**](exercise_4.html#labels)
-  + [**Themes**](exercise_4.html#themes)
-  + [**Bar Charts**](exercise_4.html#bar_charts)
-  + [**Saving Figures**](exercise_4.html#saving_figures)
-  + [**Final Practice**](exercise_4.html#final_practice)
-
-
-[Ex1]:exercise_1.html
-[Ex2]:exercise_2.html
-[Ex3]:exercise_3.html
-[Ex4]:exercise_4.html
 # Questions
 
 If you have any questions, feel free to contact me by e-mail at <sdsmith@iastate.edu>
 
-**Disclaimer:** There are people far, far more knowledgeable about R and how it works than myself. There are very few questions that I have had that I could not find the answer to explained by an expert on [stackoverflow][stack] or similar sites. Using [Google](https://www.google.com/) and other search engines effectively is a powerful skill.
+[step1]
+[step2]
+[step3]
+[step4]
+[step5]
+[step6]
 
-[stack]:https://stackoverflow.com/
+[R]:https://mirror.las.iastate.edu/CRAN/
+[Py]:https://www.python.org/
+[gnupar]: http://www.gnu.org/software/parallel/
+[rdp]: https://github.com/rdpstaff/RDPTools
+[cdhit]: http://weizhongli-lab.org/cd-hit/
+[mothur]: https://mothur.org/wiki/Main_Page
+[qiime]: http://qiime.org/
