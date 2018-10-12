@@ -1,0 +1,24 @@
+---
+title: "Read Processing"
+---
+
+### Splitting the Files
+
+Sequencing files are very large. Running through them repeatedly with each program can take a while. Fortunately, we can exploit their properties to enable parallel processing. For most steps in the pipeline, the reads are independent. Each read has 4 lines in a fastq file. And also, in the pair-end files, the read-pairs appear in the same order in each file. If we split the files evenly, the read pairs will always be in the complementary files. With smaller files we can use `parallel` to process them simultaneously.
+
+```{bash eval=FALSE}
+ls $RAWDAT_DIR/*_R*.fastq* > $RAWDAT_DIR/raw_seq_list.txt
+mkdir -p $DIR/parallel_scripts/../split_fastqs
+while read SEQS; 
+	do NAME=`basename $SEQS | cut -d "." -f 1`; 
+	mkdir -p $DIR/split_fastqs/$NAME; 
+	echo "split -l 1000000 $SEQS $DIR/split_fastqs/$NAME/"; 
+done < $RAWDAT_DIR/raw_seq_list.txt > $DIR/parallel_scripts/split_fastqs.sh
+cat $DIR/parallel_scripts/split_fastqs.sh | parallel -j 4
+ls $DIR/split_fastqs/*/* | rev | cut -d "/" -f 1 | sort -u | rev > $DIR/seqs_list.txt
+```
+
+This will create two folders in your working directory. `parallel_scripts` is just a place to store the scripts that `parallel` will run. `split_fastqs` is where we will store our smaller fastq files (notice that it is not the same directory as our raw reads).
+
+### Pair-End Read Assembly
+

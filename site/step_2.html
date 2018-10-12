@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>Read Processing</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -306,15 +306,27 @@ div.tocify {
 
 
 
+<h1 class="title toc-ignore">Read Processing</h1>
 
 </div>
 
 
-<div id="metagenome_amplicon_pipeline" class="section level1">
-<h1>metagenome_amplicon_pipeline</h1>
-<div id="just-some-different-pipelines-i-use-for-16s-analysis-and-such" class="section level2">
-<h2>Just some different pipelines I use for 16s analysis and such</h2>
+<div id="splitting-the-files" class="section level3">
+<h3>Splitting the Files</h3>
+<p>Sequencing files are very large. Running through them repeatedly with each program can take a while. Fortunately, we can exploit their properties to enable parallel processing. For most steps in the pipeline, the reads are independent. Each read has 4 lines in a fastq file. And also, in the pair-end files, the read-pairs appear in the same order in each file. If we split the files evenly, the read pairs will always be in the complementary files. With smaller files we can use <code>parallel</code> to process them simultaneously.</p>
+<pre class="bash"><code>ls $RAWDAT_DIR/*_R*.fastq* &gt; $RAWDAT_DIR/raw_seq_list.txt
+mkdir -p $DIR/parallel_scripts/../split_fastqs
+while read SEQS; 
+    do NAME=`basename $SEQS | cut -d &quot;.&quot; -f 1`; 
+    mkdir -p $DIR/split_fastqs/$NAME; 
+    echo &quot;split -l 1000000 $SEQS $DIR/split_fastqs/$NAME/&quot;; 
+done &lt; $RAWDAT_DIR/raw_seq_list.txt &gt; $DIR/parallel_scripts/split_fastqs.sh
+cat $DIR/parallel_scripts/split_fastqs.sh | parallel -j 4
+ls $DIR/split_fastqs/*/* | rev | cut -d &quot;/&quot; -f 1 | sort -u | rev &gt; $DIR/seqs_list.txt</code></pre>
+<p>This will create two folders in your working directory. <code>parallel_scripts</code> is just a place to store the scripts that <code>parallel</code> will run. <code>split_fastqs</code> is where we will store our smaller fastq files (notice that it is not the same directory as our raw reads).</p>
 </div>
+<div id="pair-end-read-assembly" class="section level3">
+<h3>Pair-End Read Assembly</h3>
 </div>
 
 

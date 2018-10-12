@@ -1,0 +1,53 @@
+---
+title: "Your Shell Environment"
+---
+
+### Paths to Your Data
+
+To keep it simple, it's easiest to put your data into a dedicated folder/directory and your raw fastq read sequence files into a subdirectory of that. However, if you are prone to deleting entire directories and don't keep backups of your files, keep them separate.
+
+```{bash eval=FALSE}
+DIR=/mnt/home/smithsch/nectar_bacteria
+RAWDAT_DIR=$DIR/raw_reads
+MAPPING_FILE=$RAWDAT_DIR/map.txt
+```
+
+When you enter these in, they will only remain for the time that you have your terminal window open, so you will need to re-enter them if you stop partway through the pipeline and start again.
+
+### Paths to Programs
+
+The pipeline uses several programs, many of which are retained in the RDP package. To make the commands simple, it is easier to give these shortcut names to their paths.
+
+`SCRIPTS` will be where the files from the `scripts` folder in this repository will be kept.<br>
+`RDP` is whereever you downloade and unpacked the RDP-tools.<br>
+`PANDASEQ` is a standalone package but was improved by the RDP group and so is contained within their package, this shortcut should got to the executable for the program.<br>
+`CHIMERA_DB` whatever database you are comparing your sequences to for chimera screening<br>
+`VSEARCH` vsearch is the free-ware version of usearch, this shortut should go to the executable of the program.<br>
+`CORES` is how many cpu-cores you want to run eac process on. If you don't know how many this is.. I would leave it at 2.<br>
+
+```{bash eval=FALSE} 
+SCRIPTS=/mnt/home/smithsch/code
+RDP=/mnt/research/rdp/public      
+PANDASEQ=$RDP/RDP_misc_tools/pandaseq/pandaseq
+CHIMERA_DB=/mnt/research/germs/Schuyler/GreenGene/current_Bacteria_unaligned.fa
+VSEARCH=/mnt/research/germs/Schuyler/Applications/bin/vsearch
+CORES=2
+```
+
+### Sequence Read Parameters
+
+These parameters are used for combining pair-end reads and filtering out poor quality reads.
+
+`OVERLAP` is the minimum number of bp your read-pairs need to overlap to assemble.<br>
+`MINLENGTH` all assembled reads shorter than this will be discarded.<br>
+`MAXLENGTH` all assembled reads longer than this will be discarded.<br>
+`Q` $Q = -10\log_{10}(e)$, the minimum [quality score][q] to keep reads.<br>
+
+```{bash}
+OVERLAP=10 
+MINLENGTH=480
+MAXLENGTH=520
+Q=25
+```
+
+[q]: https://www.drive5.com/usearch/manual/quality_score.html

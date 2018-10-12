@@ -1,35 +1,35 @@
 ---
 title: "16s Amplicon Pipeline"
 ---
-**Downloads**: [R][R] - [Python][Py] - [parallel][gnupar] - [RDP][rdp] - [cd-hit][cdhit]
+
+**Downloads**: [R][R] - [Python][Py] - [parallel][gnupar] - [RDP][rdp] - [cd-hit][cdhit] - [vsearch][v]/[usearch][u]
 
 # Why use this pipeline?
 
 There are several complete pipelines that are well maintained and coumented; the two most popular being [Mothur][mothur] and [Qiime][qiime]. Mothur runs in its own environment. It has linear workflows and does not allow you to change the input/output file names. This can be confusing for users interested in intermediate steps of the workflow. Qiime is better about this. It is run using Python and this workflow will borrow some of its scripts.
 
-# [Exercise 1 - Getting Started][Ex1]
+# [Your Shell Environment][step1]
 
-  + [**First Time In R**](exercise_1.html#first_time_in_r)
-  + [**Objects**](exercise_1.html#objects)
-  + [**Whitespace**](exercise_1.html#whitespace)
-  + [**Order of Operations**](exercise_1.html#order_of_operations)
-  + [**Scientific Notation**](exercise_1.html#scientific_notation)
-  + [**Functions**](exercise_1.html#functions)
-  + [**Variables**](exercise_1.html#variables)
-  + [**Operators**](exercise_1.html#operators)
-  + [**Loops**](exercise_1.html#loops)
-  + [**Packages**](exercise_1.html#packages)
+  + [**Paths to Your Data**](step_1.html#paths_to_your_data)
+  + [**Paths to Programs**](step_1.html#paths_to_programs)
+  + [**Sequence Read Parameters**](step_1.html#sequence_read_paramters)
+
+# [Your Shell Environment][step2]
+
+  + [**Splitting the Files**](step_2.html#splitting_the_files)
+  + [**Pair-End Read Assembly**](step_2.html#pair-end_read_assembly)
+  + [**Sequence Read Parameters**](step_2.html#sequence_read_paramters) 
 
 # Questions
 
 If you have any questions, feel free to contact me by e-mail at <sdsmith@iastate.edu>
 
-[step1]
-[step2]
-[step3]
-[step4]
-[step5]
-[step6]
+[step1]:step_1.html
+[step2]:step_2.html
+[step3]:step_3.html
+[step4]:step_4.html
+[step5]:step_5.html
+[step6]:step_6.html
 
 [R]:https://mirror.las.iastate.edu/CRAN/
 [Py]:https://www.python.org/
@@ -38,3 +38,5 @@ If you have any questions, feel free to contact me by e-mail at <sdsmith@iastate
 [cdhit]: http://weizhongli-lab.org/cd-hit/
 [mothur]: https://mothur.org/wiki/Main_Page
 [qiime]: http://qiime.org/
+[v]: https://github.com/torognes/vsearch
+[u]: http://www.drive5.com/usearch/

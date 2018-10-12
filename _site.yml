@@ -6,6 +6,10 @@ navbar:
   left:
     - text: "Overview"
       href: index.html
+    - text: "Shell Env."
+      href: step_1.html
+    - text: "Read Processing"
+      href: step_2.html
 
       
 output:
