@@ -8,17 +8,25 @@ title: "16s Amplicon Pipeline"
 
 There are several complete pipelines that are well maintained and coumented; the two most popular being [Mothur][mothur] and [Qiime][qiime]. Mothur runs in its own environment. It has linear workflows and does not allow you to change the input/output file names. This can be confusing for users interested in intermediate steps of the workflow. Qiime is better about this. It is run using Python and this workflow will borrow some of its scripts.
 
+This pipeline was originally created by [Fan Yang][fan] in the [GERMS-lab][germs]. She periodically updates [her pipeline][fanline], but I maintain my own version that I will update and annotate here.
+
 # [Your Shell Environment][step1]
 
-  + [**Paths to Your Data**](step_1.html#paths_to_your_data)
-  + [**Paths to Programs**](step_1.html#paths_to_programs)
-  + [**Sequence Read Parameters**](step_1.html#sequence_read_paramters)
+  + [**Paths to Your Data**](step_1.html#11_paths_to_your_data)
+  + [**Paths to Programs**](step_1.html#12_paths_to_programs)
+  + [**Sequence Read Parameters**](step_1.html#13_sequence_read_paramters)
 
-# [Your Shell Environment][step2]
+# [Read Processing][step2]
 
-  + [**Splitting the Files**](step_2.html#splitting_the_files)
-  + [**Pair-End Read Assembly**](step_2.html#pair-end_read_assembly)
-  + [**Sequence Read Parameters**](step_2.html#sequence_read_paramters) 
+  + [**Splitting the Files**](step_2.html#21_splitting_the_files)
+  + [**Pair-End Read Assembly**](step_2.html#22_pair-end_read_assembly)
+  + [**Sequence Read Parameters**](step_2.html#23_read_quality_filter) 
+
+# [Chimera Removal][step3]
+
+  + [**Dereplicating and Sorting Reads**](step_3.html#31_dereplicating_and_sorting_reads)
+  + [**Chimera Detection**](step_3.html#32_chimera_detection)
+
 
 # Questions
 
@@ -40,3 +48,6 @@ If you have any questions, feel free to contact me by e-mail at <sdsmith@iastate
 [qiime]: http://qiime.org/
 [v]: https://github.com/torognes/vsearch
 [u]: http://www.drive5.com/usearch/
+[fan]: https://github.com/fandemonium
+[germs]: https://github.com/germs-lab
+[fanline]: https://github.com/germs-lab/amplicon_pipelines

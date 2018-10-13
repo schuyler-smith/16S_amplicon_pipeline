@@ -6,11 +6,12 @@ navbar:
   left:
     - text: "Overview"
       href: index.html
-    - text: "Shell Env."
+    - text: "Shell Environment"
       href: step_1.html
     - text: "Read Processing"
       href: step_2.html
-
+    - text: "Chimera Removal"
+      href: step_3.html
       
 output:
   html_document:

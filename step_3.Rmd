@@ -1,0 +1,33 @@
+---
+title: "Chimera Removal"
+---
+
+`vsearch` is the primary tool we use for chimera detection and removal.
+
+### 3.1 Dereplicating and Sorting Reads
+
+There are still an enormous number of reads in our dataset. Many of these reads are identical. It doesn't make sense to analyze the same sequence repeatedly, so we concatenate the duplicate reads. `derep_fulllength` removes duplicate sequences and sorts the sequences by length. 
+
+```{bash eval=FALSE}
+$VSEARCH --threads 20 --derep_fulllength $DIR/quality_check/chimera_removal/all_combined_q$Q.fa --output $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2.fa --sizeout --minuniquesize 5
+```
+
+### 3.2 Chimera Detection
+
+#### De Novo
+
+`uchime_denovo` evaluates each sequence without an outside reference base.
+
+```{bash eval=FALSE}
+$VSEARCH --threads 20 --uchime_denovo $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2.fa --chimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.chimera --nonchimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.good
+```
+
+#### Reference
+
+`uchime_ref` screens the selected chimera database for potential matches in your sequences.
+
+```{bash eval=FALSE}
+$VSEARCH --threads 20 --uchime_ref $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.good --nonchimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo_ref.good --db $CHIMERA_DB
+```
+
+
