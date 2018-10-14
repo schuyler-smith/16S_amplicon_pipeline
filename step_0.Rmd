@@ -39,7 +39,7 @@ The fasta format has two lines per read.
 head -8 misc/R1.fasta
 ```
 
-Though technically FASTA formay is 2 lines per sequence, you may notice that the actual sequence here is on more than 1 line. Really, programs that use FASTA files check for the '>' in the read name line to denote a new sequence.. But for best practice, use 2-line format.
+Though technically FASTA formay is 2 lines per sequence, you may notice that the actual sequence for the second read here is on more than 1 line. Really, programs that use FASTA files check for the '>' in the read name line to denote a new sequence.. But for best practice, use 2-line format.
   
 ## Mapping File
 
