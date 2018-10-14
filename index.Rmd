@@ -2,13 +2,19 @@
 title: "16s Amplicon Pipeline"
 ---
 
-**Downloads**: [R][R] - [Python][Py] - [parallel][gnupar] - [RDP][rdp] - [cd-hit][cdhit] - [vsearch][v]/[usearch][u]
+**Downloads**: <a href="https://mirror.las.iastate.edu/CRAN/" target="_blank">R</a> - 
+<a href="https://www.python.org/" target="_blank">Python</a> - 
+<a href="http://www.gnu.org/software/parallel/" target="_blank">gparallel</a> - 
+<a href="https://github.com/rdpstaff/RDPTools" target="_blank">RDP</a> - 
+<a href="http://weizhongli-lab.org/cd-hit/" target="_blank">CD-Hit</a> - 
+<a href="https://github.com/torognes/vsearch" target="_blank">vsearch</a> /
+<a href="http://www.drive5.com/usearch/" target="_blank">usearch</a>
 
 # Why use this pipeline?
 
-There are several complete pipelines that are well maintained and coumented; the two most popular being [Mothur][mothur] and [Qiime][qiime]. Mothur runs in its own environment. It has linear workflows and does not allow you to change the input/output file names. This can be confusing for users interested in intermediate steps of the workflow. Qiime is better about this. It is run using Python and this workflow will borrow some of its scripts.
+There are several complete pipelines that are well maintained and coumented; the two most popular being <a href="https://mothur.org/wiki/Main_Page" target="_blank">Mothur</a> and <a href="http://qiime.org/" target="_blank">Qiime</a>. Mothur runs in its own environment. It has linear workflows and does not allow you to change the input/output file names. This can be confusing for users interested in intermediate steps of the workflow. Qiime is better about this. It is run using Python and this workflow will borrow some of its scripts.
 
-This pipeline was originally created by [Fan Yang][fan] in the [GERMS-lab][germs]. She periodically updates [her pipeline][fanline], but I maintain my own version that I will update and annotate here.
+This pipeline was originally created by <a href="https://github.com/fandemonium" target="_blank">Fan Yang</a> in the  <a href="https://github.com/germs-lab" target="_blank">GERMS-lab</a>. She periodically updates <a href="https://github.com/germs-lab/amplicon_pipelines" target="_blank">her pipeline</a>, but I maintain my own version that I will update and annotate here.
 
 # [Files][step0]
 
@@ -45,16 +51,3 @@ If you have any questions, feel free to contact me by e-mail at <sdsmith@iastate
 [step4]:step_4.html
 [step5]:step_5.html
 [step0]:step_0.html
-
-[R]:https://mirror.las.iastate.edu/CRAN/
-[Py]:https://www.python.org/
-[gnupar]: http://www.gnu.org/software/parallel/
-[rdp]: https://github.com/rdpstaff/RDPTools
-[cdhit]: http://weizhongli-lab.org/cd-hit/
-[mothur]: https://mothur.org/wiki/Main_Page
-[qiime]: http://qiime.org/
-[v]: https://github.com/torognes/vsearch
-[u]: http://www.drive5.com/usearch/
-[fan]: https://github.com/fandemonium
-[germs]: https://github.com/germs-lab
-[fanline]: https://github.com/germs-lab/amplicon_pipelines
