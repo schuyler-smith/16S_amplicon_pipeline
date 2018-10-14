@@ -10,6 +10,13 @@ There are several complete pipelines that are well maintained and coumented; the
 
 This pipeline was originally created by [Fan Yang][fan] in the [GERMS-lab][germs]. She periodically updates [her pipeline][fanline], but I maintain my own version that I will update and annotate here.
 
+# [Files][step0]
+
+  + [**Sequence Files**](step_0.html#sequence_files)
+  + [**Mapping File**](step_0.html#mapping_file)
+  + [**Reference Database**](step_0.html#reference_database)
+  + [**I Files**](step_0.html#i_filed)
+
 # [Your Shell Environment][step1]
 
   + [**Paths to Your Data**](step_1.html#11_paths_to_your_data)
@@ -37,7 +44,7 @@ If you have any questions, feel free to contact me by e-mail at <sdsmith@iastate
 [step3]:step_3.html
 [step4]:step_4.html
 [step5]:step_5.html
-[step6]:step_6.html
+[step0]:step_0.html
 
 [R]:https://mirror.las.iastate.edu/CRAN/
 [Py]:https://www.python.org/

@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>Files</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -312,15 +312,75 @@ div.tocify {
 
 
 
+<h1 class="title toc-ignore">Files</h1>
 
 </div>
 
 
-<div id="metagenome_amplicon_pipeline" class="section level1">
-<h1>metagenome_amplicon_pipeline</h1>
-<div id="just-some-different-pipelines-i-use-for-16s-analysis-and-such" class="section level2">
-<h2>Just some different pipelines I use for 16s analysis and such</h2>
+<style type="text/css">
+code{
+  white-space: pre !important;
+  overflow-x: scroll !important;
+  word-break: keep-all !important;
+  word-wrap: initial !important;
+}
+</style>
+<div id="sequence-files" class="section level2">
+<h2>Sequence Files</h2>
+<p>Sequence files come in 2 formats, [FASTQ][fq] and [FASTA][fa]. Raw reads will always come as fastq files, sometimes in compressed file formats. Some programs are written to be able to handle compressed files, but I find it’s easier to decompress the files to avoid any possible hang-ups. Compressed files typically have either a <code>.gz</code> or <code>.zip</code> file extension.</p>
+<div id="fastq" class="section level3">
+<h3>FASTQ</h3>
+<p>The fatq format always has 4 lines per read.</p>
+<ul>
+<li><span class="citation">@Read</span> name</li>
+<li>Read sequence</li>
+<li>+some line I’ve never seen used</li>
+<li>Quality scores</li>
+</ul>
+<pre><code>@M04771:122:000000000-B62C2:1:1101:13253:1557 1:N:0:0
+TCCTTTTTTTTTTCTCTTTTTTCTTCTTTCCTTTTCTTCCCTCTTTCTTCTTCTTTTTTTTCCTTCTTTTTTTCCCTCCCTTTTCTTCCCTTTTTTTTTTCCTTTTTTCCTTTTTTTCTTTTTTTTTTTTTTTTTTTTTTTTTTTTCTTTT
++
+&gt;&gt;&gt;11311&gt;@00A012BEF1AABEE22DA21DDFF2BF210B0B112DA2DF2DB111&gt;&gt;E01@@11@1@EE?011B0//011BBF12101111&lt;///&lt;/011?&lt;11&lt;0&lt;?1&lt;1&lt;-@0&lt;=000&lt;&lt;--------9@---9-9--99-///;9
+@M04771:122:000000000-B62C2:1:1101:16150:1745 1:N:0:0
+TACGGAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCGCGTAGGCGGTCTGGTCAGTCAGATGTGAAAGCCCCGGGCTCAACCTGGGAATTGCATTTGATACTGCCAGACTCGAGTGTGGTAGAGGGAAGTGGAATTCCGAGT
++
+AAAA?1AD?AAA1FGGGGE?0BGFF00FFGAGFFGEEGGAGHFEA/AE&gt;EEEBEGE/E00BGDGG&gt;1B1BFGGFFFFECEE/&lt;ECGC1CG&lt;F00FA1?FDGBFGG&gt;FFFHHG1&lt;110?F1?.CGA&gt;1AFFFBGH?.&lt;AGBF0DDC&lt;G/.:C
+@M04771:122:000000000-B62C2:1:1101:14494:1756 1:N:0:0
+TACGGAGGGGGTTAGCGTTGTTCGGAATTACTGGGCGTAAAGCGCGCGTAGGCGGATTATTCAGTCAGAGGTGAAATCCCAGGGCTCAACCCTGGAACTGCCTTTGATACTGCTAGTCTTGAGTTCGAGAGAGGTGAGTGGAATTCCGAGT
++
+A1AA11AD@1&gt;&gt;AAGGEGEEFFHFEC/FGFBGFFGEEGC?/GEE&gt;/&gt;EEEEGFEE/&gt;E12BF2GGD1B11?GHGB&gt;BGCC11/CCHE11G?&lt;00?011F&lt;FGGGH1??1FH11F11&gt;GHHF11GGD..0.@.?CGA0.DDEEC;C:C/.:;</code></pre>
 </div>
+<div id="fasta" class="section level3">
+<h3>FASTA</h3>
+<p>The fasta format has two lines per read.</p>
+<ul>
+<li>&gt;Read name</li>
+<li>Read sequence</li>
+</ul>
+<pre><code>&gt;M04771:122:000000000-B62C2:1:1101:13253:1557 1:N:0:0
+TCCTTTTTTTTTTCTCTTTTTTCTTCTTTCCTTTTCTTCCCTCTTTCTTCTTCTTTTTTTTCCTTCTTTTTTTCCCTCCCTTTTCTTCCCTTTTTTTTTTCCTTTTTTCCTTTTTTTCTTTTTTTTTTTTTTTTTTTTTTTTTTTTCTTTT
+&gt;M04771:122:000000000-B62C2:1:1101:16150:1745 1:N:0:0
+TACGGAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCGCGTAGGCGGTCTGG
+TCAGTCAGATGTGAAAGCCCCGGGCTCAACCTGGGAATTGCATTTGATACTGCCAGACTC
+GAGTGTGGTAGAGGGAAGTGGAATTCCGAGT
+&gt;M04771:122:000000000-B62C2:1:1101:14494:1756 1:N:0:0
+TACGGAGGGGGTTAGCGTTGTTCGGAATTACTGGGCGTAAAGCGCGCGTAGGCGGATTATTCAGTCAGAGGTGAAATCCCAGGGCTCAACCCTGGAACTGCCTTTGATACTGCTAGTCTTGAGTTCGAGAGAGGTGAGTGGAATTCCGAGT</code></pre>
+<p>Though technically FASTA formay is 2 lines per sequence, you may notice that the actual sequence here is on more than 1 line. Really, programs that use FASTA files check for the ‘&gt;’ in the read name line to denote a new sequence.. But for best practice, use 2-line format.</p>
+</div>
+</div>
+<div id="mapping-file" class="section level2">
+<h2>Mapping File</h2>
+<p>These files are used to match the barcodes of multiplexed reads to their source samples.</p>
+<pre><code>#SampleID   BarcodeSequence LinkerPrimer    Description     
+ATD1    TCAGCCTCAGCC    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A1      
+ATD2    TGCAGGGAACCG    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A2      
+ATD3    CAGCGCGGCTAG    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A3      
+ATD4    ATGGACCTAGCT    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A4      
+ATD5    CTAGCCCGTTCG    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A5      </code></pre>
+</div>
+<div id="reference-database" class="section level2">
+<h2>Reference Database</h2>
+<p>The reference database is typically in fasta format, and is used for two purposes in this pipeline. First, it is used to compare the reads to for chimera screening. Second, it is used to classify the read clusters as belonging to particular taxa.</p>
 </div>
 
 

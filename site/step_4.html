@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>Read Clustering</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -312,15 +312,16 @@ div.tocify {
 
 
 
+<h1 class="title toc-ignore">Read Clustering</h1>
 
 </div>
 
 
-<div id="metagenome_amplicon_pipeline" class="section level1">
-<h1>metagenome_amplicon_pipeline</h1>
-<div id="just-some-different-pipelines-i-use-for-16s-analysis-and-such" class="section level2">
-<h2>Just some different pipelines I use for 16s analysis and such</h2>
-</div>
+<div id="clustering" class="section level2">
+<h2>Clustering</h2>
+<p>Read clustering has become a hot-topic in this type of pipeline recently. Historically, reads have been clustered to 97% similiarity. The reasons for this were partly biological and mostly computational. The file size difference between clustering to 97% and 99% is significant. Some advocate not clustering at all. I’m going to recommend 99% clustering.</p>
+<pre class="bash"><code>mkdir -p $DIR/cdhit_clustering/master_otus/../R/../combined_seqs
+cd-hit-est -i $DIR/cdhit_clustering/combined_seqs/all_sequences.fa -o $DIR/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta -c 0.95 -M 200000 -T 20</code></pre>
 </div>
 
 
