@@ -1,5 +1,17 @@
-#!/bin/bash
+---
+title: "Pipeline"
+---
 
+```{css echo=FALSE}
+code{
+  white-space: pre !important;
+  overflow-x: scroll !important;
+  word-break: keep-all !important;
+  word-wrap: initial !important;
+}
+```
+<br>
+```{bash eval=FALSE}
 module load gparallel
 module load Java/1.7.0_51
 module load CDHIT/4.6.1
@@ -105,3 +117,4 @@ Rscript $SCRIPTS/renaming_taxa_rep_seq_to_otus.R $DIRECTORY/cdhit_clustering/mas
 
 
 python $SCRIPTS/cdhit_clstr_to_otu.py otus_repsetOUT.fasta > test.txt
+```

@@ -281,12 +281,12 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">16s Amplicon Pipeline</a>
+      <a class="navbar-brand" href="index.html"></a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Overview</a>
+  <a href="index.html">16s Amplicon Pipeline</a>
 </li>
 <li>
   <a href="step_0.html">Files</a>
@@ -299,6 +299,18 @@ div.tocify {
 </li>
 <li>
   <a href="step_3.html">Chimera Removal</a>
+</li>
+<li>
+  <a href="step_4.html">OTU Calling</a>
+</li>
+<li>
+  <a href="hpcc.html">HPCC</a>
+</li>
+<li>
+  <a href="pipeline.html">Pipeline</a>
+</li>
+<li>
+  <a href="help.html">Help</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -325,9 +337,10 @@ code{
   word-wrap: initial !important;
 }
 </style>
+<p><br></p>
 <div id="sequence-files" class="section level2">
 <h2>Sequence Files</h2>
-<p>Sequence files come in 2 formats, [FASTQ][fq] and [FASTA][fa]. Raw reads will always come as fastq files, sometimes in compressed file formats. Some programs are written to be able to handle compressed files, but I find it’s easier to decompress the files to avoid any possible hang-ups. Compressed files typically have either a <code>.gz</code> or <code>.zip</code> file extension.</p>
+<p>Sequence files come in 2 formats, [FASTQ][fq] and [FASTA][fa]. Raw reads will always come as fastq files, sometimes in compressed file formats. Some programs are written to be able to handle compressed files, but I find it’s easier to decompress the files to avoid any possible hang-ups. Compressed files typically have either a <code>.gz</code> or <code>.zip</code> file extension. <br><br></p>
 <div id="fastq" class="section level3">
 <h3>FASTQ</h3>
 <p>The fatq format always has 4 lines per read.</p>
@@ -349,6 +362,7 @@ AAAA?1AD?AAA1FGGGGE?0BGFF00FFGAGFFGEEGGAGHFEA/AE&gt;EEEBEGE/E00BGDGG&gt;1B1BFGGF
 TACGGAGGGGGTTAGCGTTGTTCGGAATTACTGGGCGTAAAGCGCGCGTAGGCGGATTATTCAGTCAGAGGTGAAATCCCAGGGCTCAACCCTGGAACTGCCTTTGATACTGCTAGTCTTGAGTTCGAGAGAGGTGAGTGGAATTCCGAGT
 +
 A1AA11AD@1&gt;&gt;AAGGEGEEFFHFEC/FGFBGFFGEEGC?/GEE&gt;/&gt;EEEEGFEE/&gt;E12BF2GGD1B11?GHGB&gt;BGCC11/CCHE11G?&lt;00?011F&lt;FGGGH1??1FH11F11&gt;GHHF11GGD..0.@.?CGA0.DDEEC;C:C/.:;</code></pre>
+<p><br></p>
 </div>
 <div id="fasta" class="section level3">
 <h3>FASTA</h3>
@@ -365,7 +379,7 @@ TCAGTCAGATGTGAAAGCCCCGGGCTCAACCTGGGAATTGCATTTGATACTGCCAGACTC
 GAGTGTGGTAGAGGGAAGTGGAATTCCGAGT
 &gt;M04771:122:000000000-B62C2:1:1101:14494:1756 1:N:0:0
 TACGGAGGGGGTTAGCGTTGTTCGGAATTACTGGGCGTAAAGCGCGCGTAGGCGGATTATTCAGTCAGAGGTGAAATCCCAGGGCTCAACCCTGGAACTGCCTTTGATACTGCTAGTCTTGAGTTCGAGAGAGGTGAGTGGAATTCCGAGT</code></pre>
-<p>Though technically FASTA formay is 2 lines per sequence, you may notice that the actual sequence here is on more than 1 line. Really, programs that use FASTA files check for the ‘&gt;’ in the read name line to denote a new sequence.. But for best practice, use 2-line format.</p>
+<p>Though technically FASTA formay is 2 lines per sequence, you may notice that the actual sequence for the second read here is on more than 1 line. Really, programs that use FASTA files check for the ‘&gt;’ in the read name line to denote a new sequence.. But for best practice, use 2-line format. <br><br></p>
 </div>
 </div>
 <div id="mapping-file" class="section level2">
@@ -377,6 +391,7 @@ ATD2    TGCAGGGAACCG    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A2
 ATD3    CAGCGCGGCTAG    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A3      
 ATD4    ATGGACCTAGCT    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A4      
 ATD5    CTAGCCCGTTCG    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A5      </code></pre>
+<p><br></p>
 </div>
 <div id="reference-database" class="section level2">
 <h2>Reference Database</h2>

@@ -1,6 +1,15 @@
 ---
 title: "Read Processing"
 ---
+```{css echo=FALSE}
+code{
+  white-space: pre !important;
+  overflow-x: scroll !important;
+  word-break: keep-all !important;
+  word-wrap: initial !important;
+}
+```
+<br>
 
 ### 2.1 Splitting the Files
 
@@ -19,12 +28,19 @@ ls $DIR/split_fastqs/*/* | rev | cut -d "/" -f 1 | sort -u | rev > $DIR/seqs_lis
 ```
 
 This will create two folders in your working directory. `parallel_scripts` is just a place to store the scripts that `parallel` will run. `split_fastqs` is where we will store our smaller fastq files (notice that it is not the same directory as our raw reads).
-<br>
+<br><br>
 Then, the files are `split` into files of `1000000` lines, or 250,000 reads.
+<br><br>
+Additionally a file `seqs_list.txt` will be created. This file contains the names of the split fastq files. The code uses a lot of relativistic commands, so it is possible that it does not properly work if your file has an unconventional name. If that is the case and you need assistance, feel free to conatact me. `seqs_list.txt` should appear as:
+
+```{r engine='bash', comment='', echo=FALSE}
+head -6 misc/seqs_list.txt
+```
+<br>
 
 ### 2.2 Pair-End Read Assembly
 
-If you have pair-end reads, reads that were sequenced from both forward and reverse directions, then you need to combine them before processing through the rest of the pipeline. Our tool of choice for this is [pandaseq][panda], which is included in RDP-tools.
+If you have pair-end reads, reads that were sequenced from both forward and reverse directions, then you need to combine them before processing through the rest of the pipeline. Our tool of choice for this is <a href="https://github.com/neufeld/pandaseq" target="_blank">pandaseq</a>, which is included in RDP-tools.
 
 ```{bash eval=FALSE}
 mkdir -p $DIR/pandaseq/assembled/../stats
@@ -35,19 +51,18 @@ cat $DIR/parallel_scripts/pandaseq.sh | parallel -j 10
 find $DIR/pandaseq/assembled -type f -size 0 -exec rm {} +
 ls $DIR/pandaseq/assembled/* | rev | cut -d "/" -f 1 | rev | cut -d "." -f 1 > $DIR/seqs_list.txt
 ```
+<br>
 
 ### 2.3 Read Quality Filter
 
 As an extra measure of quality control, we can use the RDP `SeqFilters` program to check the pandaseq outputs for quality reads. This is additionally important if you did not have to assemble pair-end reads befor this.
 
 ```{bash eval=FALSE}
-mkdir -p $DIR/quality_check/seqs_$Q/../chimera_removal/../final_seqs
+mkdir -p $DIR/quality_check/seqs_q$Q/../chimera_removal/../final_seqs
 while read SEQS;
-	do echo "java -jar $RDP/RDPTools/SeqFilters.jar -Q $Q -s $DIR/pandaseq/assembled/$SEQS.assembled.fastq -o $DIR/quality_check/seqs_$Q -O $SEQS; 
-python $SCRIPTS/fastq_to_fasta.py $DIR/quality_check/seqs_$Q/$SEQS/NoTag/NoTag_trimmed.fastq $DIR/quality_check/seqs_$Q/$SEQS/$SEQS.fa";
+	do echo "java -jar $RDP/RDPTools/SeqFilters.jar -Q $Q -s $DIR/pandaseq/assembled/$SEQS.assembled.fastq -o $DIR/quality_check/seqs_q$Q -O $SEQS; 
+python $SCRIPTS/fastq_to_fasta.py $DIR/quality_check/seqs_q$Q/$SEQS/NoTag/NoTag_trimmed.fastq $DIR/quality_check/seqs_q$Q/$SEQS/$SEQS.fa";
 done < $DIR/seqs_list.txt > $DIR/parallel_scripts/qc.sh
 cat $DIR/parallel_scripts/qc.sh | parallel -j 20 --delay 2
-cat $DIR/quality_check/seqs_25/*/*.fa > $DIR/quality_check/chimera_removal/all_combined_q25.fa
+cat $DIR/quality_check/seqs_25/*/*.fa > $DIR/quality_check/chimera_removal/all_combined_q$Q.fa
 ```
-
-[panda]:https://github.com/neufeld/pandaseq

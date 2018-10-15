@@ -1,8 +1,17 @@
 ---
-  title: "Read Clustering"
+  title: "OTU Calling"
 ---
+```{css echo=FALSE}
+code{
+  white-space: pre !important;
+  overflow-x: scroll !important;
+  word-break: keep-all !important;
+  word-wrap: initial !important;
+}
+```
+<br>
 
-## Clustering
+## 4.1 Clustering
 
 Read clustering has become a hot-topic in this type of pipeline recently. Historically, reads have been clustered to 97% similiarity. The reasons for this were partly biological and mostly computational. The file size difference between clustering to 97% and 99% is significant. Some advocate not clustering at all. I'm going to recommend 99% clustering.
 

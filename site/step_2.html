@@ -281,12 +281,12 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">16s Amplicon Pipeline</a>
+      <a class="navbar-brand" href="index.html"></a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Overview</a>
+  <a href="index.html">16s Amplicon Pipeline</a>
 </li>
 <li>
   <a href="step_0.html">Files</a>
@@ -299,6 +299,18 @@ div.tocify {
 </li>
 <li>
   <a href="step_3.html">Chimera Removal</a>
+</li>
+<li>
+  <a href="step_4.html">OTU Calling</a>
+</li>
+<li>
+  <a href="hpcc.html">HPCC</a>
+</li>
+<li>
+  <a href="pipeline.html">Pipeline</a>
+</li>
+<li>
+  <a href="help.html">Help</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -317,6 +329,15 @@ div.tocify {
 </div>
 
 
+<style type="text/css">
+code{
+  white-space: pre !important;
+  overflow-x: scroll !important;
+  word-break: keep-all !important;
+  word-wrap: initial !important;
+}
+</style>
+<p><br></p>
 <div id="splitting-the-files" class="section level3">
 <h3>2.1 Splitting the Files</h3>
 <p>Sequencing files are very large. Running through them repeatedly with each program can take a while. Fortunately, we can exploit their properties to enable parallel processing. For most steps in the pipeline, the reads are independent. Each read has 4 lines in a fastq file. And also, in the pair-end files, the read-pairs appear in the same order in each file. If we split the files evenly, the read pairs will always be in the complementary files. With smaller files we can use <code>parallel</code> to process them simultaneously.</p>
@@ -329,11 +350,18 @@ while read SEQS;
 done &lt; $RAWDAT_DIR/raw_seq_list.txt &gt; $DIR/parallel_scripts/split_fastqs.sh
 cat $DIR/parallel_scripts/split_fastqs.sh | parallel -j 4
 ls $DIR/split_fastqs/*/* | rev | cut -d &quot;/&quot; -f 1 | sort -u | rev &gt; $DIR/seqs_list.txt</code></pre>
-<p>This will create two folders in your working directory. <code>parallel_scripts</code> is just a place to store the scripts that <code>parallel</code> will run. <code>split_fastqs</code> is where we will store our smaller fastq files (notice that it is not the same directory as our raw reads). <br> Then, the files are <code>split</code> into files of <code>1000000</code> lines, or 250,000 reads.</p>
+<p>This will create two folders in your working directory. <code>parallel_scripts</code> is just a place to store the scripts that <code>parallel</code> will run. <code>split_fastqs</code> is where we will store our smaller fastq files (notice that it is not the same directory as our raw reads). <br><br> Then, the files are <code>split</code> into files of <code>1000000</code> lines, or 250,000 reads. <br><br> Additionally a file <code>seqs_list.txt</code> will be created. This file contains the names of the split fastq files. The code uses a lot of relativistic commands, so it is possible that it does not properly work if your file has an unconventional name. If that is the case and you need assistance, feel free to conatact me. <code>seqs_list.txt</code> should appear as:</p>
+<pre><code>aa
+ab
+ac
+ad
+ae
+af</code></pre>
+<p><br></p>
 </div>
 <div id="pair-end-read-assembly" class="section level3">
 <h3>2.2 Pair-End Read Assembly</h3>
-<p>If you have pair-end reads, reads that were sequenced from both forward and reverse directions, then you need to combine them before processing through the rest of the pipeline. Our tool of choice for this is <a href="https://github.com/neufeld/pandaseq">pandaseq</a>, which is included in RDP-tools.</p>
+<p>If you have pair-end reads, reads that were sequenced from both forward and reverse directions, then you need to combine them before processing through the rest of the pipeline. Our tool of choice for this is <a href="https://github.com/neufeld/pandaseq" target="_blank">pandaseq</a>, which is included in RDP-tools.</p>
 <pre class="bash"><code>mkdir -p $DIR/pandaseq/assembled/../stats
 while read SEQS;
     do echo &quot;$PANDASEQ -T $CORES -o $OVERLAP -e $Q -N -F -d rbkfms -l $MINLENGTH -L $MAXLENGTH -f $DIR/split_fastqs/*_R1_*/$SEQS -r $DIR/split_fastqs/*_R2_*/$SEQS 1&gt; $DIR/pandaseq/assembled/$SEQS.assembled.fastq 2&gt; $DIR/pandaseq/stats/$SEQS.assembled.stats.txt.bz2&quot;;
@@ -341,17 +369,18 @@ done &lt; $DIR/seqs_list.txt &gt; $DIR/parallel_scripts/pandaseq.sh
 cat $DIR/parallel_scripts/pandaseq.sh | parallel -j 10
 find $DIR/pandaseq/assembled -type f -size 0 -exec rm {} +
 ls $DIR/pandaseq/assembled/* | rev | cut -d &quot;/&quot; -f 1 | rev | cut -d &quot;.&quot; -f 1 &gt; $DIR/seqs_list.txt</code></pre>
+<p><br></p>
 </div>
 <div id="read-quality-filter" class="section level3">
 <h3>2.3 Read Quality Filter</h3>
 <p>As an extra measure of quality control, we can use the RDP <code>SeqFilters</code> program to check the pandaseq outputs for quality reads. This is additionally important if you did not have to assemble pair-end reads befor this.</p>
-<pre class="bash"><code>mkdir -p $DIR/quality_check/seqs_$Q/../chimera_removal/../final_seqs
+<pre class="bash"><code>mkdir -p $DIR/quality_check/seqs_q$Q/../chimera_removal/../final_seqs
 while read SEQS;
-    do echo &quot;java -jar $RDP/RDPTools/SeqFilters.jar -Q $Q -s $DIR/pandaseq/assembled/$SEQS.assembled.fastq -o $DIR/quality_check/seqs_$Q -O $SEQS; 
-python $SCRIPTS/fastq_to_fasta.py $DIR/quality_check/seqs_$Q/$SEQS/NoTag/NoTag_trimmed.fastq $DIR/quality_check/seqs_$Q/$SEQS/$SEQS.fa&quot;;
+    do echo &quot;java -jar $RDP/RDPTools/SeqFilters.jar -Q $Q -s $DIR/pandaseq/assembled/$SEQS.assembled.fastq -o $DIR/quality_check/seqs_q$Q -O $SEQS; 
+python $SCRIPTS/fastq_to_fasta.py $DIR/quality_check/seqs_q$Q/$SEQS/NoTag/NoTag_trimmed.fastq $DIR/quality_check/seqs_q$Q/$SEQS/$SEQS.fa&quot;;
 done &lt; $DIR/seqs_list.txt &gt; $DIR/parallel_scripts/qc.sh
 cat $DIR/parallel_scripts/qc.sh | parallel -j 20 --delay 2
-cat $DIR/quality_check/seqs_25/*/*.fa &gt; $DIR/quality_check/chimera_removal/all_combined_q25.fa</code></pre>
+cat $DIR/quality_check/seqs_25/*/*.fa &gt; $DIR/quality_check/chimera_removal/all_combined_q$Q.fa</code></pre>
 </div>
 
 

@@ -11,7 +11,7 @@
 
 
 
-<title>Chimera Removal</title>
+<title>Help</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -324,7 +324,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Chimera Removal</h1>
+<h1 class="title toc-ignore">Help</h1>
 
 </div>
 
@@ -338,25 +338,11 @@ code{
 }
 </style>
 <p><br></p>
-<p><code>vsearch</code> is the primary tool we use for chimera detection and removal. <br><br></p>
-<div id="dereplicating-and-sorting-reads" class="section level3">
-<h3>3.1 Dereplicating and Sorting Reads</h3>
-<p>There are still an enormous number of reads in our dataset. Many of these reads are identical. It doesn’t make sense to analyze the same sequence repeatedly, so we concatenate the duplicate reads. <code>derep_fulllength</code> removes duplicate sequences and sorts the sequences by length.</p>
-<pre class="bash"><code>$VSEARCH --threads 20 --derep_fulllength $DIR/quality_check/chimera_removal/all_combined_q$Q.fa --output $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2.fa --sizeout --minuniquesize 5</code></pre>
-<p><br></p>
+<div id="trouble-shooting" class="section level2">
+<h2>Trouble Shooting</h2>
 </div>
-<div id="chimera-detection" class="section level3">
-<h3>3.2 Chimera Detection</h3>
-<div id="de-novo" class="section level4">
-<h4>De Novo</h4>
-<p><code>uchime_denovo</code> evaluates each sequence without an outside reference base.</p>
-<pre class="bash"><code>$VSEARCH --threads 20 --uchime_denovo $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2.fa --chimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.chimera --nonchimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.good</code></pre>
-</div>
-<div id="reference" class="section level4">
-<h4>Reference</h4>
-<p><code>uchime_ref</code> screens the selected chimera database for potential matches in your sequences.</p>
-<pre class="bash"><code>$VSEARCH --threads 20 --uchime_ref $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.good --nonchimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo_ref.good --db $CHIMERA_DB</code></pre>
-</div>
+<div id="contact" class="section level2">
+<h2>Contact</h2>
 </div>
 
 

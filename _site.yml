@@ -1,10 +1,10 @@
 name: "16s Amplicon Pipeline"
 output_dir: "site"
 navbar:
-  title: "16s Amplicon Pipeline"
+  title: ""
   type: inverse
   left:
-    - text: "Overview"
+    - text: "16s Amplicon Pipeline"
       href: index.html
     - text: "Files"
       href: step_0.html
@@ -14,7 +14,14 @@ navbar:
       href: step_2.html
     - text: "Chimera Removal"
       href: step_3.html
-      
+    - text: "OTU Calling"
+      href: step_4.html
+    - text: "HPCC"
+      href: hpcc.html
+    - text: "Pipeline"
+      href: pipeline.html
+    - text: "Help"
+      href: help.html
 output:
   html_document:
     lib_dir: site_libs

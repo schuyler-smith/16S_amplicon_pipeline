@@ -10,10 +10,12 @@ code{
   word-wrap: initial !important;
 }
 ```
+<br>
 
 ## Sequence Files
 
 Sequence files come in 2 formats, [FASTQ][fq] and [FASTA][fa]. Raw reads will always come as fastq files, sometimes in compressed file formats. Some programs are written to be able to handle compressed files, but I find it's easier to decompress the files to avoid any possible hang-ups. Compressed files typically have either a `.gz` or `.zip` file extension.
+<br><br>
 
 ### FASTQ
 
@@ -27,6 +29,7 @@ The fatq format always has 4 lines per read.
 ```{r engine='bash', comment='', echo=FALSE}
 head -12 misc/R1.fastq
 ```
+<br>
 
 ### FASTA
 
@@ -40,7 +43,8 @@ head -8 misc/R1.fasta
 ```
 
 Though technically FASTA formay is 2 lines per sequence, you may notice that the actual sequence for the second read here is on more than 1 line. Really, programs that use FASTA files check for the '>' in the read name line to denote a new sequence.. But for best practice, use 2-line format.
-  
+<br><br>
+
 ## Mapping File
 
 These files are used to match the barcodes of multiplexed reads to their source samples.
@@ -48,6 +52,7 @@ These files are used to match the barcodes of multiplexed reads to their source 
 ```{r engine='bash', comment='', echo=FALSE}
 head -6 misc/mapping_file.txt
 ```
+<br>
 
 ## Reference Database
 

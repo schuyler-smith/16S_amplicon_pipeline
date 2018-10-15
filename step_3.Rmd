@@ -1,8 +1,18 @@
 ---
 title: "Chimera Removal"
 ---
+```{css echo=FALSE}
+code{
+  white-space: pre !important;
+  overflow-x: scroll !important;
+  word-break: keep-all !important;
+  word-wrap: initial !important;
+}
+```
+<br>
 
 `vsearch` is the primary tool we use for chimera detection and removal.
+<br><br>
 
 ### 3.1 Dereplicating and Sorting Reads
 
@@ -11,6 +21,7 @@ There are still an enormous number of reads in our dataset. Many of these reads 
 ```{bash eval=FALSE}
 $VSEARCH --threads 20 --derep_fulllength $DIR/quality_check/chimera_removal/all_combined_q$Q.fa --output $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2.fa --sizeout --minuniquesize 5
 ```
+<br>
 
 ### 3.2 Chimera Detection
 

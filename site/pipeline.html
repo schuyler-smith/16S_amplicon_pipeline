@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Pipeline</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="misc/styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">16s Amplicon Pipeline</a>
+</li>
+<li>
+  <a href="step_0.html">Files</a>
+</li>
+<li>
+  <a href="step_1.html">Shell Environment</a>
+</li>
+<li>
+  <a href="step_2.html">Read Processing</a>
+</li>
+<li>
+  <a href="step_3.html">Chimera Removal</a>
+</li>
+<li>
+  <a href="step_4.html">OTU Calling</a>
+</li>
+<li>
+  <a href="hpcc.html">HPCC</a>
+</li>
+<li>
+  <a href="pipeline.html">Pipeline</a>
+</li>
+<li>
+  <a href="help.html">Help</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Pipeline</h1>
+
+</div>
+
+
+<style type="text/css">
+code{
+  white-space: pre !important;
+  overflow-x: scroll !important;
+  word-break: keep-all !important;
+  word-wrap: initial !important;
+}
+</style>
+<p><br></p>
+<pre class="bash"><code>module load gparallel
+module load Java/1.7.0_51
+module load CDHIT/4.6.1
+module load R/2.15.1
+module load Biopython/1.65
+
+
+DIRECTORY=/mnt/home/smithsch/Yeast
+RAWDAT_DIRECTORY=$DIRECTORY/original
+MAPPING_FILE=$RAWDAT_DIRECTORY/map.txt
+
+SCRIPTS=/mnt/home/smithsch/code
+RDP=/mnt/research/rdp/public
+PANDASEQ=$RDP/RDP_misc_tools/pandaseq/pandaseq
+CHIMERA_DB=/mnt/scratch/smithsch/DataBase_GreenGene/current_Bacteria_unaligned.fa
+VSEARCH=/mnt/research/germs/Schuyler/Applications/bin/vsearch
+CORES=2
+
+## assemble paired-ends. The below parameters work well with bacterial 16S. 
+OVERLAP=10 ## minimal number of overlapped bases required for pair-end assembling. Not so critical if you set the length parameters (see below)
+MINLENGTH=480 #16s: &quot;250&quot; ## minimal length of the assembled sequence
+MAXLENGTH=520 #16s: &quot;280&quot; ## maximum length of the assembled sequence
+Q=25 ## minimal read quality score.
+
+
+ls $RAWDAT_DIRECTORY/*_R*.fastq* &gt; $RAWDAT_DIRECTORY/raw_seq_list.txt
+mkdir -p $DIRECTORY/parallel_scripts/../split_fastqs
+while read SEQS; 
+    do NAME=`basename $SEQS | cut -d &quot;.&quot; -f 1`; 
+    mkdir -p $DIRECTORY/split_fastqs/$NAME; 
+    echo &quot;split -l 1000000 $SEQS $DIRECTORY/split_fastqs/$NAME/&quot;; 
+done &lt; $RAWDAT_DIRECTORY/raw_seq_list.txt &gt; $DIRECTORY/parallel_scripts/split_fastqs.sh
+cat $DIRECTORY/parallel_scripts/split_fastqs.sh | parallel -j 4
+ls $DIRECTORY/split_fastqs/*/* | rev | cut -d &quot;/&quot; -f 1 | sort -u | rev &gt; $DIRECTORY/seqs_list.txt
+
+
+mkdir -p $DIRECTORY/pandaseq/assembled/../stats
+while read SEQS;
+    do echo &quot;$PANDASEQ -T $CORES -o $OVERLAP -e $Q -N -F -d rbkfms -l $MINLENGTH -L $MAXLENGTH -f $DIRECTORY/split_fastqs/*_R1_*/$SEQS -r $DIRECTORY/split_fastqs/*_R2_*/$SEQS 1&gt; $DIRECTORY/pandaseq/assembled/$SEQS.assembled.fastq 2&gt; $DIRECTORY/pandaseq/stats/$SEQS.assembled.stats.txt.bz2&quot;;
+done &lt; $DIRECTORY/seqs_list.txt &gt; $DIRECTORY/parallel_scripts/pandaseq.sh
+cat $DIRECTORY/parallel_scripts/pandaseq.sh | parallel -j 10
+find $DIRECTORY/pandaseq/assembled -type f -size 0 -exec rm {} +
+ls $DIRECTORY/pandaseq/assembled/* | rev | cut -d &quot;/&quot; -f 1 | rev | cut -d &quot;.&quot; -f 1 &gt; $DIRECTORY/seqs_list.txt
+
+mkdir -p $DIRECTORY/quality_check/seqs_25/../chimera_removal/../final_seqs
+while read SEQS;
+    do echo &quot;java -jar $RDP/RDPTools/SeqFilters.jar -Q $Q -s $DIRECTORY/pandaseq/assembled/$SEQS.assembled.fastq -o $DIRECTORY/quality_check/seqs_25 -O $SEQS; python $SCRIPTS/fastq_to_fasta.py $DIRECTORY/quality_check/seqs_25/$SEQS/NoTag/NoTag_trimmed.fastq $DIRECTORY/quality_check/seqs_25/$SEQS/$SEQS.fa&quot;;
+done &lt; $DIRECTORY/seqs_list.txt &gt; $DIRECTORY/parallel_scripts/qc.sh
+cat $DIRECTORY/parallel_scripts/qc.sh | parallel -j 20 --delay 2
+cat $DIRECTORY/quality_check/seqs_25/*/*.fa &gt; $DIRECTORY/quality_check/chimera_removal/all_combined_q25.fa
+
+$VSEARCH --threads 20 --derep_fulllength $DIRECTORY/quality_check/chimera_removal/all_combined_q25.fa --output $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2.fa --sizeout --minuniquesize 5
+$VSEARCH --threads 20 --uchime_denovo $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2.fa --chimeras $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2_denovo.chimera --nonchimeras $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2_denovo.good
+$VSEARCH --threads 20 --uchime_ref $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2_denovo.good --nonchimeras $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2_denovo_ref.good --db $CHIMERA_DB
+
+while read SEQS;
+    do echo &quot;$VSEARCH --usearch_global $DIRECTORY/quality_check/seqs_25/$SEQS/$SEQS.fa --db $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2_denovo_ref.good --id 0.985 --matched $DIRECTORY/quality_check/final_seqs/$SEQS\_finalized.fa&quot;;
+done &lt; $DIRECTORY/seqs_list.txt &gt; $DIRECTORY/parallel_scripts/remapping.sh
+cat $DIRECTORY/parallel_scripts/remapping.sh | parallel -j 20
+
+mkdir -p $DIRECTORY/i_file/../demultiplex/parse_index/../bins/../empty_samples/../demultiplex_finalized; split -l 1000000 $RAWDAT_DIRECTORY/*_I*.fastq* $DIRECTORY/i_file/
+perl $SCRIPTS/dos2unix.pl $MAPPING_FILE &gt; $DIRECTORY/demultiplex/tag_file.txt
+python $SCRIPTS/MiSeq_rdptool_map_parser.py $DIRECTORY/demultiplex/tag_file.txt &gt; $DIRECTORY/demultiplex/tag_file.tag
+
+while read I;
+    do mkdir $DIRECTORY/demultiplex/parse_index/$I
+    echo &quot;java -jar $RDP/RDPTools/SeqFilters.jar --seq-file $DIRECTORY/i_file/$I --tag-file $DIRECTORY/demultiplex/tag_file.tag --outdir $DIRECTORY/demultiplex/parse_index/$I&quot;
+done &lt; $DIRECTORY/seqs_list.txt &gt; $DIRECTORY/parallel_scripts/demultiplex.sh
+cat $DIRECTORY/parallel_scripts/demultiplex.sh | parallel -j 14
+awk &#39;{print $1}&#39; $DIRECTORY/demultiplex/tag_file.txt | tail -n +2 &gt; $DIRECTORY/lane_list.txt
+
+while read LANE;
+    do echo &quot;cat $DIRECTORY/demultiplex/parse_index/*/result_DIRECTORY/$LANE/$LANE\_trimmed.fastq &gt; $DIRECTORY/demultiplex/bins/$LANE\_trimmed.fastq&quot;
+done &lt; $DIRECTORY/lane_list.txt &gt; $DIRECTORY/parallel_scripts/cat_lanes.sh
+cat $DIRECTORY/parallel_scripts/cat_lanes.sh | parallel -j 20
+
+
+# here change lane_list to include only the ones you want in the analysis.
+
+while read SEQS;
+    do mkdir -p $DIRECTORY/demultiplex/parsed_fastas/$SEQS
+    echo &quot;python $SCRIPTS/bin_reads.py $DIRECTORY/quality_check/final_seqs/$SEQS\_finalized.fa $DIRECTORY/demultiplex/bins $DIRECTORY/demultiplex/parsed_fastas/$SEQS&quot;
+done &lt; $DIRECTORY/seqs_list.txt &gt; $DIRECTORY/parallel_scripts/bin_reads.sh
+cat $DIRECTORY/parallel_scripts/bin_reads.sh | parallel -j 20
+
+while read I;
+    do echo &quot;cat $DIRECTORY/demultiplex/parsed_fastas/*/$I*.fasta &gt; $DIRECTORY/demultiplex/demultiplex_finalized/$I.fasta&quot;
+done &lt; $DIRECTORY/lane_list.txt &gt; $DIRECTORY/parallel_scripts/cat_bins.sh
+cat $DIRECTORY/parallel_scripts/cat_bins.sh | parallel -j 20
+find $DIRECTORY/demultiplex/demultiplex_finalized -type f -size 0 -exec mv -t $DIRECTORY/demultiplex/empty_samples/ {} +
+
+
+mkdir -p $DIRECTORY/cdhit_clustering/master_otus/../R/../combined_seqs
+python $SCRIPTS/renaming_seq_w_short_sample_name.py $DIRECTORY/cdhit_clustering/combined_seqs/sample_filename_map.txt $DIRECTORY/cdhit_clustering/combined_seqs/sequence_name_map.txt $DIRECTORY/demultiplex/demultiplex_finalized/*.fasta &gt; $DIRECTORY/cdhit_clustering/combined_seqs/all_sequences.fa
+cd-hit-est -i $DIRECTORY/cdhit_clustering/combined_seqs/all_sequences.fa -o $DIRECTORY/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta -c 0.95 -M 200000 -T 20
+python $SCRIPTS/cdhit_clstr_to_otu.py $DIRECTORY/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta.clstr &gt; $DIRECTORY/cdhit_clustering/master_otus/cdhit_otu_table_long.txt
+Rscript $SCRIPTS/convert_otu_table_long_to_wide_format.R $DIRECTORY/cdhit_clustering/master_otus/cdhit_otu_table_long.txt $DIRECTORY/cdhit_clustering/R/cdhit_otu_table_wide.txt
+
+java -Xmx24g -jar $RDP/RDPTools/classifier.jar classify -c 0.5 -f filterbyconf -o $DIRECTORY/cdhit_clustering/master_otus/cdhit_otu_taxa_filterbyconf.txt -h $DIRECTORY/cdhit_clustering/master_otus/cdhit_otu_taxa_filterbyconf_hierarchy.txt $DIRECTORY/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta
+
+python $SCRIPTS/rep_seq_to_otu_mapping.py $DIRECTORY/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta.clstr &gt; $DIRECTORY/cdhit_clustering/combined_seqs/combined_seqs_cdhit_rep_seq_to_cluster.map
+Rscript $SCRIPTS/renaming_taxa_rep_seq_to_otus.R $DIRECTORY/cdhit_clustering/master_otus/cdhit_otu_taxa_filterbyconf.txt $DIRECTORY/cdhit_clustering/combined_seqs/combined_seqs_cdhit_rep_seq_to_cluster.map $DIRECTORY/cdhit_clustering/R/cdhit_taxa_table_w_repseq.txt
+
+
+python $SCRIPTS/cdhit_clstr_to_otu.py otus_repsetOUT.fasta &gt; test.txt</code></pre>
+
+
+<p><br>
+<br>
+<strong><a href="https://schuyler-smith.github.io/" target="_blank">Schuyler Smith</a></strong>
+<br>
+Ph.D. Student - Bioinformatics and Computational Biology<br>
+Iowa State University.  Ames, IA.</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
