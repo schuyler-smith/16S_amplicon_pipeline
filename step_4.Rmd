@@ -13,9 +13,22 @@ code{
 
 ## 4.1 Clustering
 
-Read clustering has become a hot-topic in this type of pipeline recently. Historically, reads have been clustered to 97% similiarity. The reasons for this were partly biological and mostly computational. The file size difference between clustering to 97% and 99% is significant. Some advocate not clustering at all. I'm going to recommend 99% clustering.
+Read clustering has become a hot-topic in these pipelines recently. Historically, reads have been clustered to 97% similiarity. The reasons for this were partly biological and mostly computational. The file size difference between clustering to 97% and 99% is significant. Some advocate not clustering at all. I'm going to recommend 99% clustering.
+<br><br>
+Clustering, afterall, ***is*** your OTU calling
+<br><br>
+There are two main types of clustering you will here about. Same as with the chimera detection, they are de novo and reference based clustering.
+
+#### Refernce Based
+
+This type of clustering uses a database t0 match the reads to. This is certainly a very accurate way of clustering reads, though potentially taking more computational time, it is the best method for well annotated systems.
+
+#### De Novo Based
+
+In particular, soil is not a very well annotated system. Meaning, you are going to find many organism that have not been previosuly sequenced, and thus do not exist in a database. For this reason, we used de novo clustering, and we like to use <a href="http://weizhongli-lab.org/cd-hit/" target="_blank">CD-Hit</a>.
 
 ```{bash eval=FALSE}
 mkdir -p $DIR/cdhit_clustering/master_otus/../R/../combined_seqs
-cd-hit-est -i $DIR/cdhit_clustering/combined_seqs/all_sequences.fa -o $DIR/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta -c 0.95 -M 200000 -T 20
+cd-hit-est -i $DIR/cdhit_clustering/combined_seqs/all_sequences.fa -o $DIR/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta -c 0.99 -M 200000 -T 20
 ```
+

@@ -19,7 +19,7 @@ code{
 There are still an enormous number of reads in our dataset. Many of these reads are identical. It doesn't make sense to analyze the same sequence repeatedly, so we concatenate the duplicate reads. `derep_fulllength` removes duplicate sequences and sorts the sequences by length. 
 
 ```{bash eval=FALSE}
-$VSEARCH --threads 20 --derep_fulllength $DIR/quality_check/chimera_removal/all_combined_q$Q.fa --output $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2.fa --sizeout --minuniquesize 5
+$VSEARCH --threads 20 --derep_fulllength $DIR/quality_check/chimera_removal/all_combined_q$Q.fa --output $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort.fa --sizeout --minuniquesize 2
 ```
 <br>
 
@@ -30,7 +30,7 @@ $VSEARCH --threads 20 --derep_fulllength $DIR/quality_check/chimera_removal/all_
 `uchime_denovo` evaluates each sequence without an outside reference base.
 
 ```{bash eval=FALSE}
-$VSEARCH --threads 20 --uchime_denovo $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2.fa --chimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.chimera --nonchimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.good
+$VSEARCH --threads 20 --uchime_denovo $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort.fa --chimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_denovo.chimera --nonchimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_denovo.good
 ```
 
 #### Reference
@@ -38,7 +38,13 @@ $VSEARCH --threads 20 --uchime_denovo $DIR/quality_check/chimera_removal/all_com
 `uchime_ref` screens the selected chimera database for potential matches in your sequences.
 
 ```{bash eval=FALSE}
-$VSEARCH --threads 20 --uchime_ref $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.good --nonchimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo_ref.good --db $CHIMERA_DB
+$VSEARCH --threads 20 --uchime_ref $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_denovo.good --nonchimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_denovo_ref.good --db $CHIMERA_DB
 ```
+
+
+```{bash eval=FALSE}
+$VSEARCH --derep_fulllength $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_denovo_ref.good --relabel "U_" --output $DIR/quality_check/chimera_removal/relabeled_denovo_ref.good 
+```
+
 
 

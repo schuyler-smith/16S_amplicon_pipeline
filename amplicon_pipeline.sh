@@ -35,7 +35,6 @@ done < $RAWDAT_DIRECTORY/raw_seq_list.txt > $DIRECTORY/parallel_scripts/split_fa
 cat $DIRECTORY/parallel_scripts/split_fastqs.sh | parallel -j 4
 ls $DIRECTORY/split_fastqs/*/* | rev | cut -d "/" -f 1 | sort -u | rev > $DIRECTORY/seqs_list.txt
 
-
 mkdir -p $DIRECTORY/pandaseq/assembled/../stats
 while read SEQS;
 	do echo "$PANDASEQ -T $CORES -o $OVERLAP -e $Q -N -F -d rbkfms -l $MINLENGTH -L $MAXLENGTH -f $DIRECTORY/split_fastqs/*_R1_*/$SEQS -r $DIRECTORY/split_fastqs/*_R2_*/$SEQS 1> $DIRECTORY/pandaseq/assembled/$SEQS.assembled.fastq 2> $DIRECTORY/pandaseq/stats/$SEQS.assembled.stats.txt.bz2";
@@ -76,7 +75,6 @@ while read LANE;
 done < $DIRECTORY/lane_list.txt > $DIRECTORY/parallel_scripts/cat_lanes.sh
 cat $DIRECTORY/parallel_scripts/cat_lanes.sh | parallel -j 20
 
-
 # here change lane_list to include only the ones you want in the analysis.
 
 while read SEQS;
@@ -91,7 +89,6 @@ done < $DIRECTORY/lane_list.txt > $DIRECTORY/parallel_scripts/cat_bins.sh
 cat $DIRECTORY/parallel_scripts/cat_bins.sh | parallel -j 20
 find $DIRECTORY/demultiplex/demultiplex_finalized -type f -size 0 -exec mv -t $DIRECTORY/demultiplex/empty_samples/ {} +
 
-
 mkdir -p $DIRECTORY/cdhit_clustering/master_otus/../R/../combined_seqs
 python $SCRIPTS/renaming_seq_w_short_sample_name.py $DIRECTORY/cdhit_clustering/combined_seqs/sample_filename_map.txt $DIRECTORY/cdhit_clustering/combined_seqs/sequence_name_map.txt $DIRECTORY/demultiplex/demultiplex_finalized/*.fasta > $DIRECTORY/cdhit_clustering/combined_seqs/all_sequences.fa
 cd-hit-est -i $DIRECTORY/cdhit_clustering/combined_seqs/all_sequences.fa -o $DIRECTORY/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta -c 0.95 -M 200000 -T 20
@@ -103,5 +100,5 @@ java -Xmx24g -jar $RDP/RDPTools/classifier.jar classify -c 0.5 -f filterbyconf -
 python $SCRIPTS/rep_seq_to_otu_mapping.py $DIRECTORY/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta.clstr > $DIRECTORY/cdhit_clustering/combined_seqs/combined_seqs_cdhit_rep_seq_to_cluster.map
 Rscript $SCRIPTS/renaming_taxa_rep_seq_to_otus.R $DIRECTORY/cdhit_clustering/master_otus/cdhit_otu_taxa_filterbyconf.txt $DIRECTORY/cdhit_clustering/combined_seqs/combined_seqs_cdhit_rep_seq_to_cluster.map $DIRECTORY/cdhit_clustering/R/cdhit_taxa_table_w_repseq.txt
 
-
 python $SCRIPTS/cdhit_clstr_to_otu.py otus_repsetOUT.fasta > test.txt
+

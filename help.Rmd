@@ -12,7 +12,7 @@ code{
 ```
 <br>
 
-## Trouble Shooting
+## Troubleshooting
 
 ## Contact
 

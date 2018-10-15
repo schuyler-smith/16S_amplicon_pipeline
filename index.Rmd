@@ -4,11 +4,11 @@ title: "16s Amplicon Pipeline"
 
 **Downloads**: <a href="https://mirror.las.iastate.edu/CRAN/" target="_blank">R</a> - 
 <a href="https://www.python.org/" target="_blank">Python</a> - 
-<a href="http://www.gnu.org/software/parallel/" target="_blank">gparallel</a> - 
 <a href="https://github.com/rdpstaff/RDPTools" target="_blank">RDP</a> - 
 <a href="http://weizhongli-lab.org/cd-hit/" target="_blank">CD-Hit</a> - 
 <a href="https://github.com/torognes/vsearch" target="_blank">vsearch</a> /
-<a href="http://www.drive5.com/usearch/" target="_blank">usearch</a>
+<a href="http://www.drive5.com/usearch/" target="_blank">usearch</a> - 
+<a href="http://www.gnu.org/software/parallel/" target="_blank">gparallel</a>
 
 # Why use this pipeline?
 
