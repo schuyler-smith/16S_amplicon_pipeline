@@ -14,7 +14,7 @@ title: "16s Amplicon Pipeline"
 
 There are several complete pipelines that are well maintained and coumented; the two most popular being <a href="https://mothur.org/wiki/Main_Page" target="_blank">Mothur</a> and <a href="http://qiime.org/" target="_blank">Qiime</a>. Mothur runs in its own environment. It has linear workflows and does not allow you to change the input/output file names. This can be confusing for users interested in intermediate steps of the workflow. Qiime is better about this. It is run using Python and this workflow will borrow some of its scripts.
 
-This pipeline was originally created by <a href="https://github.com/fandemonium" target="_blank">Fan Yang</a> in the  <a href="https://github.com/germs-lab" target="_blank">GERMS-lab</a>. She periodically updates <a href="https://github.com/germs-lab/amplicon_pipelines" target="_blank">her pipeline</a>, but I maintain my own version that I will update and annotate here.
+This pipeline was originally created by <a href="https://github.com/fandemonium" target="_blank">Fan Yang</a> in the  <a href="http://germslab.org/" target="_blank">GERMS-lab</a>. She periodically updates <a href="https://github.com/germs-lab/amplicon_pipelines" target="_blank">her pipeline</a>, but I maintain my own version that I will update and annotate here.
 
 # [Files][step0]
 
