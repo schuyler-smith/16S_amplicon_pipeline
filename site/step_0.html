@@ -382,20 +382,40 @@ TACGGAGGGGGTTAGCGTTGTTCGGAATTACTGGGCGTAAAGCGCGCGTAGGCGGATTATTCAGTCAGAGGTGAAATCCC
 <p>Though technically FASTA formay is 2 lines per sequence, you may notice that the actual sequence for the second read here is on more than 1 line. Really, programs that use FASTA files check for the ‘&gt;’ in the read name line to denote a new sequence.. But for best practice, use 2-line format. <br><br></p>
 </div>
 </div>
+<div id="reference-database" class="section level2">
+<h2>Reference Database</h2>
+<p>The reference database is typically in fasta format, and is used for two purposes in this pipeline. First, it is used to compare the reads to for chimera screening. Second, it is used to classify the read clusters as belonging to particular taxa. The most commonly used databases are <a href="https://www.arb-silva.de/" target="_blank">Silva</a>, <a href="http://greengenes.secondgenome.com/" target="_blank">GreenGenes</a>, and the <a href="https://rdp.cme.msu.edu/" target="_blank">RDP</a>.</p>
+<pre><code>&gt;S000494589 uncultured bacterium; YRM60L1D06060904  Lineage=Root;rootrank;Bacteria;domain;&quot;Actinobacteria&quot;;phylum;Actinobacteria;class;Acidimicrobidae;subclass;Acidimicrobiales;order;&quot;Acidimicrobineae&quot;;suborder;Acidimicrobiaceae;family;Acidimicrobium;genus
+gcggcgtgctacacatgcagtcgtacgcggtggcacaccgagtggcgaacgggtgcgtaacacgtgaggaacctaccccg
+aagtgggggataacaccgggaaaccggtgctaataccgcatacgctccccggaccgcatggtccagggagcaaagcctcc
+gggcgcttcgggacggcctcgcggcctatcagcttgttggtggggtaacggcccaccaaggcgacgacgggtagctggtc
+tgagaggacgatcagccacactgggactgagacacggcccagactcctacgggaggcagcagtggggaatattgcgcaat
+gggcgaaagcctgacgcagcaacgccgcgtggaggacgaaggccttcgggttgtaaactcctttcagcagggacgaaact
+gacggtacctgcagaagaagccccggctaactacgtgccagcagccgcggtaag</code></pre>
+</div>
 <div id="mapping-file" class="section level2">
 <h2>Mapping File</h2>
-<p>These files are used to match the barcodes of multiplexed reads to their source samples.</p>
+<p>These files are used to match the barcodes of multiplexed reads to their source samples. Depending on the sequencing facility there may by 2 files, a mapping file and and I file. The mapping file is used to match the barcode the sample.</p>
 <pre><code>#SampleID   BarcodeSequence LinkerPrimer    Description     
 ATD1    TCAGCCTCAGCC    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A1      
 ATD2    TGCAGGGAACCG    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A2      
 ATD3    CAGCGCGGCTAG    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A3      
 ATD4    ATGGACCTAGCT    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A4      
 ATD5    CTAGCCCGTTCG    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A5      </code></pre>
+<p>The I file matches the read to the barcode.</p>
+<pre><code>@M04771:122:000000000-B62C2:1:1101:13253:1557 1:N:0:0
+TTTTTTTTTTCT
++
+1111&gt;33B3B13
+@M04771:122:000000000-B62C2:1:1101:16150:1745 1:N:0:0
+TGGGTTAACACA
++
+&gt;111&gt;&gt;11B3B1
+@M04771:122:000000000-B62C2:1:1101:14494:1756 1:N:0:0
+TTTCTTTTCTTT
++
+111113313B33</code></pre>
 <p><br></p>
-</div>
-<div id="reference-database" class="section level2">
-<h2>Reference Database</h2>
-<p>The reference database is typically in fasta format, and is used for two purposes in this pipeline. First, it is used to compare the reads to for chimera screening. Second, it is used to classify the read clusters as belonging to particular taxa.</p>
 </div>
 
 
