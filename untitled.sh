@@ -1,6 +1,6 @@
 module load parallel
 module load Python/2.7.14
-pip install --user Biopython
+#pip install --user Biopython
 
 DIRECTORY=/mnt/research/germs/Schuyler/Projects/Xuewei
 RAWDAT_DIRECTORY=$DIRECTORY/original
