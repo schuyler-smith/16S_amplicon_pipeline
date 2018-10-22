@@ -16,14 +16,16 @@ CORES=2
 ## assemble paired-ends. The below parameters work well with bacterial 16S. 
 OVERLAP=10 ## minimal number of overlapped bases required for pair-end assembling. Not so critical if you set the length parameters (see below)
 MINLENGTH=200 #16s: "250" ## minimal length of the assembled sequence
-MAXLENGTH=280 #16s: "280" ## maximum length of the assembled sequence
-Q=25 ## minimal read quality score.
+MAXLENGTH=600 #16s: "280" ## maximum length of the assembled sequence
+Q=10 ## minimal read quality score.
 
 
 mkdir -p $DIRECTORY/parallel_scripts/../i_file/../demultiplex/parse_index/../bins/../empty_samples/../demultiplex_finalized; split -l 1000000 $RAWDAT_DIRECTORY/*_I*.fastq* $DIRECTORY/i_file/
 ls $DIRECTORY/i_file/* | rev | cut -d "/" -f 1 | sort -u | rev > $DIRECTORY/seqs_list.txt
 
 mkdir -p $DIRECTORY/demultiplex/parse_index/../bins/../empty_samples/../demultiplex_finalized
+
+
 perl $SCRIPTS/dos2unix.pl $MAPPING_FILE > $DIRECTORY/demultiplex/tag_file.txt
 python $SCRIPTS/MiSeq_rdptool_map_parser.py $DIRECTORY/demultiplex/tag_file.txt > $DIRECTORY/demultiplex/tag_file.tag
 ### tag_file input must be (barcode \t sample_ID) below line swaps column position if mapping file in opposite order. 
@@ -52,12 +54,9 @@ java -jar $RDP/RDPTools/SeqFilters.jar -Q $Q -s $DIRECTORY/pandaseq/assembled/se
 python $SCRIPTS/fastq_to_fasta.py $DIRECTORY/quality_check/seqs_25/sequences/NoTag/NoTag_trimmed.fastq $DIRECTORY/quality_check/seqs_25/sequences/sequences.fa
 
 
-while read SEQS;
-	do mkdir -p $DIRECTORY/demultiplex/demultiplex_finalized/$SEQS
-	echo "python $SCRIPTS/bin_reads.py $DIRECTORY/quality_check/seqs_25/sequences/sequences.fa"
-done < $DIRECTORY/seqs_list.txt > $DIRECTORY/parallel_scripts/bin_reads.sh
-cat $DIRECTORY/parallel_scripts/bin_reads.sh | parallel -j 20
-mv $DIRECTORY/demultiplex/bins/* $DIRECTORY/demultiplex/demultiplex_finalized/$SEQS
+python $SCRIPTS/bin_reads.py $DIRECTORY/quality_check/seqs_25/sequences/sequences.fa $DIRECTORY/demultiplex/bins $DIRECTORY/demultiplex/demultiplex_finalized
+
+mv $DIRECTORY/demultiplex/bins/*assem* $DIRECTORY/demultiplex/demultiplex_finalized
 find $DIRECTORY/demultiplex/demultiplex_finalized -type f -size 0 -exec mv -t $DIRECTORY/demultiplex/empty_samples/ {} +
 ls $DIRECTORY/demultiplex/demultiplex_finalized/* | rev | cut -d "/" -f 1 | sort -u | rev | cut -d "_" -f 1 > $DIRECTORY/seqs_list.txt
 
