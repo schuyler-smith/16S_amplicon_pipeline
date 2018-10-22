@@ -11,9 +11,23 @@ code{
 ```
 <br>
 
-### 2.1 Splitting the Files
+## 2.1 Splitting the Files
 
-Sequencing files are very large. Running through them repeatedly with each program can take a while. Fortunately, we can exploit their properties to enable parallel processing. For most steps in the pipeline, the reads are independent. Each read has 4 lines in a fastq file. And also, in the pair-end files, the read-pairs appear in the same order in each file. If we split the files evenly, the read pairs will always be in the complementary files. With smaller files we can use `parallel` to process them simultaneously.
+Sequencing files are very large. Running through them repeatedly with each program can take a while. Fortunately, we can process the files in smaller sets in parrallel to expedite the process.
+
+### Demultiplexing
+
+It depends on the facility that does the sequencing, but in most cases the fastq files are already demultiplexed. When this is the case, it is easy, becasue our job is already done, we just need to create the list of the files.
+
+```{bash eval=FALSE}
+mkdir -p $DIR/parallel_scripts/../split_fastqs/reads
+cp $RAWDAT_DIR/*_R*.fastq* $DIR/split_fastqs/reads"
+ls $DIR/split_fastqs/reads/* | rev | cut -d "/" -f 1 | sort -u | rev > $DIR/seqs_list.txt
+```
+
+### Splitting by Reads
+
+Sometimes the sequencing files aren't demultiplex, or can't be for whatever reason. When that is the case we can exploit their properties to enable parallel processing. For most steps in the pipeline, the reads are independent. Each read has 4 lines in a fastq file. And also, in the pair-end files, the read-pairs appear in the same order in each file. If we split the files evenly, the read pairs will always be in the complementary files. With smaller files we can use `parallel` to process them simultaneously.
 
 ```{bash eval=FALSE}
 ls $RAWDAT_DIR/*_R*.fastq* > $RAWDAT_DIR/raw_seq_list.txt
@@ -38,7 +52,7 @@ head -6 misc/seqs_list.txt
 ```
 <br>
 
-### 2.2 Pair-End Read Assembly
+## 2.2 Pair-End Read Assembly
 
 If you have pair-end reads, reads that were sequenced from both forward and reverse directions, then you need to combine them before processing through the rest of the pipeline. Our tool of choice for this is <a href="https://github.com/neufeld/pandaseq" target="_blank">pandaseq</a>, which is included in RDP-tools.
 
@@ -53,7 +67,7 @@ ls $DIR/pandaseq/assembled/* | rev | cut -d "/" -f 1 | rev | cut -d "." -f 1 > $
 ```
 <br>
 
-### 2.3 Read Quality Filter
+## 2.3 Read Quality Filter
 
 As an extra measure of quality control, we can use the RDP `SeqFilters` program to check the pandaseq outputs for quality reads. This is additionally important if you did not have to assemble pair-end reads befor this.
 

@@ -19,9 +19,9 @@ This pipeline was originally created by <a href="https://github.com/fandemonium"
 # [Files][step0]
 
   + [**Sequence Files**](step_0.html#sequence_files)
-  + [**Mapping File**](step_0.html#mapping_file)
   + [**Reference Database**](step_0.html#reference_database)
-  + [**I Files**](step_0.html#i_filed)
+  + [**Mapping Files**](step_0.html#mapping_files)
+
 
 # [Your Shell Environment][step1]
 
@@ -39,15 +39,26 @@ This pipeline was originally created by <a href="https://github.com/fandemonium"
 
   + [**Dereplicating and Sorting Reads**](step_3.html#31_dereplicating_and_sorting_reads)
   + [**Chimera Detection**](step_3.html#32_chimera_detection)
+  + [**Sort for Clustering**](step_3.html#33_sort_for_clustering)
 
+# [OTU Calling][step4]
+
+  + [**Clustering**](step_4.html#41_clustering)
+  + [**Sample Mapping**](step_4.html#42_sample_mapping)
+  + [**Taxa Classification**](step_4.html#43_taxa_classification)
+
+# [HPCC][hpc]
+
+# [Pipeline][pipe]
 
 # Questions
 
 If you have any questions, feel free to contact me by e-mail at <sdsmith@iastate.edu>
 
+[step0]:step_0.html
 [step1]:step_1.html
 [step2]:step_2.html
 [step3]:step_3.html
 [step4]:step_4.html
-[step5]:step_5.html
-[step0]:step_0.html
+[hpc]:hpcc.html
+[pipie]:pipeline.html

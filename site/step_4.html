@@ -341,16 +341,27 @@ code{
 <div id="clustering" class="section level2">
 <h2>4.1 Clustering</h2>
 <p>Read clustering has become a hot-topic in these pipelines recently. Historically, reads have been clustered to 97% similiarity. The reasons for this were partly biological and mostly computational. The file size difference between clustering to 97% and 99% is significant. Some advocate not clustering at all. I’m going to recommend 99% clustering. <br><br> Clustering, afterall, <strong><em>is</em></strong> your OTU calling <br><br> There are two main types of clustering you will here about. Same as with the chimera detection, they are de novo and reference based clustering.</p>
-<div id="refernce-based" class="section level4">
-<h4>Refernce Based</h4>
+<div id="reference-based" class="section level3">
+<h3>Reference Based</h3>
 <p>This type of clustering uses a database t0 match the reads to. This is certainly a very accurate way of clustering reads, though potentially taking more computational time, it is the best method for well annotated systems.</p>
 </div>
-<div id="de-novo-based" class="section level4">
-<h4>De Novo Based</h4>
+<div id="de-novo-based" class="section level3">
+<h3>De Novo Based</h3>
 <p>In particular, soil is not a very well annotated system. Meaning, you are going to find many organism that have not been previosuly sequenced, and thus do not exist in a database. For this reason, we used de novo clustering, and we like to use <a href="http://weizhongli-lab.org/cd-hit/" target="_blank">CD-Hit</a>.</p>
+<p>For this pipeline we first cluster all reads from every sample together to create a master_otu file.</p>
 <pre class="bash"><code>mkdir -p $DIR/cdhit_clustering/master_otus/../R/../combined_seqs
-cd-hit-est -i $DIR/cdhit_clustering/combined_seqs/all_sequences.fa -o $DIR/cdhit_clustering/combined_seqs/combined_seqs_cdhit.fasta -c 0.99 -M 200000 -T 20</code></pre>
+cd-hit-est -i $DIRECTORY/quality_check/chimera_removal/relabeled_denovo_ref.good -o $DIR/cdhit_clustering/master_otus/master_seqs_cdhit.fasta -c 0.99 -M 200000 -T 20</code></pre>
 </div>
+</div>
+<div id="sample-mapping" class="section level2">
+<h2>4.2 Sample Mapping</h2>
+<p>Once we have that master list we then map the individual samples back to the master_otus.</p>
+<pre class="bash"><code>cd-hit-est-2d -i $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_99 -i2 $DIRECTORY/cdhit_clustering/renamed_seqs/all_renamed_sequences.fa -o $DIRECTORY/cdhit_clustering/master_otus/otu_mapping_cdhit99 -c 0.99 -M 200000 -T 20</code></pre>
+</div>
+<div id="taxa-classification" class="section level2">
+<h2>4.3 Taxa Classification</h2>
+<p>The taxa table is independent of the otu table, so the classification does not need to happen prior to clustering. RDP has an efficient classifier that can use the given database to match sequences.</p>
+<pre class="bash"><code>java -Xmx24g -jar $RDP/classifier.jar classify -c 0.5 -f filterbyconf -o $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_99_taxa_filterbyconf.txt -h $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_99_taxa_filterbyconf_hierarchy.txt $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_99</code></pre>
 </div>
 
 

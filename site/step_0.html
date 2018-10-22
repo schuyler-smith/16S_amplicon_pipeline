@@ -340,7 +340,7 @@ code{
 <p><br></p>
 <div id="sequence-files" class="section level2">
 <h2>Sequence Files</h2>
-<p>Sequence files come in 2 formats, [FASTQ][fq] and [FASTA][fa]. Raw reads will always come as fastq files, sometimes in compressed file formats. Some programs are written to be able to handle compressed files, but I find it’s easier to decompress the files to avoid any possible hang-ups. Compressed files typically have either a <code>.gz</code> or <code>.zip</code> file extension. <br><br></p>
+<p>Sequence files come in 2 formats, FASTQ and FASTA. Raw reads will always come as fastq files, sometimes in compressed file formats. Some programs are written to be able to handle compressed files, but I find it’s easier to decompress the files to avoid any possible hang-ups. Compressed files typically have either a <code>.gz</code> or <code>.zip</code> file extension. <br><br></p>
 <div id="fastq" class="section level3">
 <h3>FASTQ</h3>
 <p>The fatq format always has 4 lines per read.</p>
@@ -392,9 +392,10 @@ gggcgcttcgggacggcctcgcggcctatcagcttgttggtggggtaacggcccaccaaggcgacgacgggtagctggtc
 tgagaggacgatcagccacactgggactgagacacggcccagactcctacgggaggcagcagtggggaatattgcgcaat
 gggcgaaagcctgacgcagcaacgccgcgtggaggacgaaggccttcgggttgtaaactcctttcagcagggacgaaact
 gacggtacctgcagaagaagccccggctaactacgtgccagcagccgcggtaag</code></pre>
+<p><br></p>
 </div>
-<div id="mapping-file" class="section level2">
-<h2>Mapping File</h2>
+<div id="mapping-files" class="section level2">
+<h2>Mapping Files</h2>
 <p>These files are used to match the barcodes of multiplexed reads to their source samples. Depending on the sequencing facility there may by 2 files, a mapping file and and I file. The mapping file is used to match the barcode the sample.</p>
 <pre><code>#SampleID   BarcodeSequence LinkerPrimer    Description     
 ATD1    TCAGCCTCAGCC    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A1      

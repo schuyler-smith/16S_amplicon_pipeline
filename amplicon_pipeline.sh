@@ -54,6 +54,8 @@ $VSEARCH --threads 20 --derep_fulllength $DIRECTORY/quality_check/chimera_remova
 $VSEARCH --threads 20 --uchime_denovo $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2.fa --chimeras $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2_denovo.chimera --nonchimeras $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2_denovo.good
 $VSEARCH --threads 20 --uchime_ref $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2_denovo.good --nonchimeras $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2_denovo_ref.good --db $CHIMERA_DB
 
+$VSEARCH --threads 20 --derep_fulllength $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2_denovo_ref.good --relabel "U_" --output $DIRECTORY/quality_check/chimera_removal/relabeled_denovo_ref.good
+
 while read SEQS;
 	do echo "$VSEARCH --usearch_global $DIRECTORY/quality_check/seqs_25/$SEQS/$SEQS.fa --db $DIRECTORY/quality_check/chimera_removal/all_combined_q25_unique_sort_min2_denovo_ref.good --id 0.985 --matched $DIRECTORY/quality_check/final_seqs/$SEQS\_finalized.fa";
 done < $DIRECTORY/seqs_list.txt > $DIRECTORY/parallel_scripts/remapping.sh

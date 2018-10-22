@@ -1,17 +1,3 @@
----
-title: "Pipeline"
----
-
-```{css echo=FALSE}
-code{
-  white-space: pre !important;
-  overflow-x: scroll !important;
-  word-break: keep-all !important;
-  word-wrap: initial !important;
-}
-```
-<br>
-```{bash eval=FALSE}
 module load parallel
 module load Python/2.7.14
 pip install --user Biopython
@@ -98,5 +84,3 @@ python $SCRIPTS/rep_seq_to_otu_mapping.py $DIRECTORY/cdhit_clustering/master_otu
 java -Xmx24g -jar $RDP/classifier.jar classify -c 0.5 -f filterbyconf -o $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_99_taxa_filterbyconf.txt -h $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_99_taxa_filterbyconf_hierarchy.txt $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_99
 Rscript $SCRIPTS/renaming_taxa_rep_seq_to_otus.R $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_99_taxa_filterbyconf.txt $DIRECTORY/cdhit_clustering/master_otus/rep_seq_to_cluster.map $DIRECTORY/cdhit_clustering/R/cdhit_taxa_table_w_repseq.txt
 
-
-```

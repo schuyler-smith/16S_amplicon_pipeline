@@ -54,7 +54,7 @@ head -7 misc/DB.fasta
 ```
 <br>
 
-## Mapping File
+## Mapping Files
 
 These files are used to match the barcodes of multiplexed reads to their source samples. Depending on the sequencing facility there may by 2 files, a mapping file and and I file. The mapping file is used to match the barcode the sample.
 
