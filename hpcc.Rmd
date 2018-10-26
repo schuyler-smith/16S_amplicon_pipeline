@@ -11,6 +11,8 @@ code{
 ```
 <br>
 
+The MSU HPCC is undergoing some overhauls currently, so things are actively changing and I'm not exaclty certain how to get this working at the moment..
+
 ### Modules
 
 ```{bash eval=FALSE}
@@ -26,7 +28,7 @@ module load Biopython/1.65
 ### Modules
 
 ```{bash eval=FALSE}
-module load parallel
-module load Python/2.7.14
+module spider parallel
+module spider Python/2.7.14
 pip install --user Biopython
 ```

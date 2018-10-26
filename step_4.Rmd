@@ -30,15 +30,16 @@ In particular, soil is not a very well annotated system. Meaning, you are going 
 For this pipeline we first cluster all reads from every sample together to create a master_otu file.
 
 ```{bash eval=FALSE}
-mkdir -p $DIR/cdhit_clustering/master_otus/../R/../combined_seqs
-cd-hit-est -i $DIRECTORY/quality_check/chimera_removal/relabeled_denovo_ref.good -o $DIR/cdhit_clustering/master_otus/master_seqs_cdhit.fasta -c 0.99 -M 200000 -T 20
+mkdir -p $DIRECTORY/cdhit_clustering/master_otus/../R/../combined_seqs/../renamed_seqs
+$CDHIT/cd-hit-est -i $DIRECTORY/quality_check/chimera_removal/relabeled_denovo_ref.good -o $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_$CLUSTER -c $CLUSTER -M 200000 -T -j $CORES
 ```
 
 ## 4.2 Sample Mapping
 Once we have that master list we then map the individual samples back to the master_otus.
 
 ```{bash eval=FALSE}
-cd-hit-est-2d -i $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_99 -i2 $DIRECTORY/cdhit_clustering/renamed_seqs/all_renamed_sequences.fa -o $DIRECTORY/cdhit_clustering/master_otus/otu_mapping_cdhit99 -c 0.99 -M 200000 -T 20
+python $SCRIPTS/renaming_seq_w_short_sample_name.py "S_" $DIRECTORY/cdhit_clustering/renamed_seqs/sample_filename_map.txt $DIRECTORY/cdhit_clustering/renamed_seqs/sequence_name_map.txt $DIRECTORY/demultiplex/demultiplex_finalized/*.fasta > $DIRECTORY/cdhit_clustering/renamed_seqs/all_renamed_sequences.fa
+$CDHIT/cd-hit-est-2d -i $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_$CLUSTER -i2 $DIRECTORY/cdhit_clustering/renamed_seqs/all_renamed_sequences.fa -o $DIRECTORY/cdhit_clustering/master_otus/otu_mapping_cdhit99 -c $CLUSTER -M 200000 -T -j $CORES
 ```
 
 ## 4.3 Taxa Classification
@@ -46,6 +47,15 @@ cd-hit-est-2d -i $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_go
 The taxa table is independent of the otu table, so the classification does not need to happen prior to clustering. RDP has an efficient classifier that can use the given database to match sequences.
 
 ```{bash eval=FALSE}
-java -Xmx24g -jar $RDP/classifier.jar classify -c 0.5 -f filterbyconf -o $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_99_taxa_filterbyconf.txt -h $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_99_taxa_filterbyconf_hierarchy.txt $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_99
+python $SCRIPTS/cdhit_otu_mapping.py $DIRECTORY/cdhit_clustering/master_otus/otu_mapping_cdhit_$CLUSTER.clstr > $DIRECTORY/cdhit_clustering/master_otus/cdhit_otu_table_long.txt
+Rscript $SCRIPTS/convert_otu_table_long_to_wide_format.R $DIRECTORY/cdhit_clustering/master_otus/cdhit_otu_table_long.txt $DIRECTORY/cdhit_clustering/R/cdhit_otu_table_wide.txt
+python $SCRIPTS/rep_seq_to_otu_mapping.py $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_$CLUSTER.clstr > $DIRECTORY/cdhit_clustering/master_otus/rep_seq_to_cluster.map 
+
+java -Xmx24g -jar $RDP/classifier.jar classify -c 0.5 -f filterbyconf -o $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_$CLUSTER\_taxa_filterbyconf.txt -h $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_$CLUSTER\_taxa_filterbyconf_hierarchy.txt $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_$CLUSTER
+```
+
+
+```{bash eval=FALSE}
+Rscript $SCRIPTS/renaming_taxa_rep_seq_to_otus.R $DIRECTORY/cdhit_clustering/master_otus/relabeled_denovo_ref_good_cdhit_$CLUSTER\_taxa_filterbyconf.txt $DIRECTORY/cdhit_clustering/master_otus/rep_seq_to_cluster.map $DIRECTORY/cdhit_clustering/R/cdhit_taxa_table_w_repseq.txt
 ```
 

@@ -14,5 +14,22 @@ code{
 
 ## Troubleshooting
 
+The only parameters that should be necessary to change are in the top section with 
+
+```{bash eval=FALSE} 
+DIRECTORY=/mnt/research/germs/Schuyler/Projects/X
+RAWDAT_DIRECTORY=$DIRECTORY/original
+MAPPING_FILE=$RAWDAT_DIRECTORY/map.txt
+CORES=20
+
+OVERLAP=10
+MINLENGTH=210 
+MAXLENGTH=280
+Q=10
+CLUSTER=0.99
+```
+
+Feel free to explore other parameters within the code. As long as you have the raw data backed-up, there is no commands in this pipeline that should be able to make unfixable mistakes.
+
 ## Contact
 

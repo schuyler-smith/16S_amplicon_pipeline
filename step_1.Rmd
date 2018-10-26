@@ -16,8 +16,8 @@ code{
 To keep it simple, it's easiest to put your data into a dedicated folder/directory and your raw fastq read sequence files into a subdirectory of that. However, if you are prone to deleting entire directories and don't keep backups of your files, keep them separate.
 
 ```{bash eval=FALSE}
-DIRECTORY=/mnt/home/smithsch/Nectar
-RAWDAT_DIRECTORY=$DIRECTORY/raw_reads
+DIRECTORY=/mnt/research/germs/Schuyler/Projects/X
+RAWDAT_DIRECTORY=$DIRECTORY/original
 MAPPING_FILE=$RAWDAT_DIRECTORY/map.txt
 ```
 
@@ -36,12 +36,12 @@ The pipeline uses several programs, many of which are retained in the RDP packag
 `CORES` is how many cpu-cores you want to run eac process on. If you don't know how many this is.. I would leave it at 2.<br>
 
 ```{bash eval=FALSE} 
-SCRIPTS=/mnt/home/smithsch/code
-RDP=/mnt/research/rdp/public      
-PANDASEQ=$RDP/RDP_misc_tools/pandaseq/pandaseq
-CHIMERA_DB=/mnt/research/germs/Schuyler/GreenGene/current_Bacteria_unaligned.fa
-VSEARCH=/mnt/research/germs/Schuyler/Applications/bin/vsearch
-CORES=2
+SCRIPTS=/mnt/research/germs/Schuyler/code
+RDP=/mnt/research/germs/softwares/RDPTools
+PANDASEQ=/mnt/research/germs/softwares/pandaseq/pandaseq
+VSEARCH=/mnt/research/germs/softwares/vsearch-2.5.0/bin/vsearch
+CDHIT=/mnt/research/germs/softwares/cdhit/
+CHIMERA_DB=/mnt/research/germs/databases/greengene/current_Bacteria_unaligned.fa
 ```
 <br>
 
@@ -56,7 +56,15 @@ These parameters are used for combining pair-end reads and filtering out poor qu
 
 ```{bash}
 OVERLAP=10 
-MINLENGTH=240
-MAXLENGTH=260
+MINLENGTH=210
+MAXLENGTH=280
 Q=25
+```
+
+## 1.4 Cores
+
+Several of the programs can use multiprocessing. Ones that do not, we can use parallele to run separate processes on multiple cores. Any PC can have anywhere from 2-8 cores typically. On the HPCC you can request a large number, I like 20. We use the variable `CORES` to let the script know how many are available.
+
+```{bash}
+CORES=20
 ```

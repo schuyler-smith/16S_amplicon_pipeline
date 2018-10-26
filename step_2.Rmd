@@ -11,72 +11,96 @@ code{
 ```
 <br>
 
-## 2.1 Splitting the Files
-
-Sequencing files are very large. Running through them repeatedly with each program can take a while. Fortunately, we can process the files in smaller sets in parrallel to expedite the process.
-
-### Demultiplexing
-
-It depends on the facility that does the sequencing, but in most cases the fastq files are already demultiplexed. When this is the case, it is easy, becasue our job is already done, we just need to create the list of the files.
-
-```{bash eval=FALSE}
-mkdir -p $DIR/parallel_scripts/../split_fastqs/reads
-cp $RAWDAT_DIR/*_R*.fastq* $DIR/split_fastqs/reads"
-ls $DIR/split_fastqs/reads/* | rev | cut -d "/" -f 1 | sort -u | rev > $DIR/seqs_list.txt
-```
-
-### Splitting by Reads
-
-Sometimes the sequencing files aren't demultiplex, or can't be for whatever reason. When that is the case we can exploit their properties to enable parallel processing. For most steps in the pipeline, the reads are independent. Each read has 4 lines in a fastq file. And also, in the pair-end files, the read-pairs appear in the same order in each file. If we split the files evenly, the read pairs will always be in the complementary files. With smaller files we can use `parallel` to process them simultaneously.
-
-```{bash eval=FALSE}
-ls $RAWDAT_DIR/*_R*.fastq* > $RAWDAT_DIR/raw_seq_list.txt
-mkdir -p $DIR/parallel_scripts/../split_fastqs
-while read SEQS; 
-	do NAME=`basename $SEQS | cut -d "." -f 1`; 
-	mkdir -p $DIR/split_fastqs/$NAME; 
-	echo "split -l 1000000 $SEQS $DIR/split_fastqs/$NAME/"; 
-done < $RAWDAT_DIR/raw_seq_list.txt > $DIR/parallel_scripts/split_fastqs.sh
-cat $DIR/parallel_scripts/split_fastqs.sh | parallel -j 4
-ls $DIR/split_fastqs/*/* | rev | cut -d "/" -f 1 | sort -u | rev > $DIR/seqs_list.txt
-```
-
-This will create two folders in your working directory. `parallel_scripts` is just a place to store the scripts that `parallel` will run. `split_fastqs` is where we will store our smaller fastq files (notice that it is not the same directory as our raw reads).
-<br><br>
-Then, the files are `split` into files of `1000000` lines, or 250,000 reads.
-<br><br>
-Additionally a file `seqs_list.txt` will be created. This file contains the names of the split fastq files. The code uses a lot of relativistic commands, so it is possible that it does not properly work if your file has an unconventional name. If that is the case and you need assistance, feel free to conatact me. `seqs_list.txt` should appear as:
-
-```{r engine='bash', comment='', echo=FALSE}
-head -6 misc/seqs_list.txt
-```
-<br>
-
-## 2.2 Pair-End Read Assembly
+## 2.1 Pair-End Read Assembly
 
 If you have pair-end reads, reads that were sequenced from both forward and reverse directions, then you need to combine them before processing through the rest of the pipeline. Our tool of choice for this is <a href="https://github.com/neufeld/pandaseq" target="_blank">pandaseq</a>, which is included in RDP-tools.
 
 ```{bash eval=FALSE}
-mkdir -p $DIR/pandaseq/assembled/../stats
-while read SEQS;
-	do echo "$PANDASEQ -T $CORES -o $OVERLAP -e $Q -N -F -d rbkfms -l $MINLENGTH -L $MAXLENGTH -f $DIR/split_fastqs/*_R1_*/$SEQS -r $DIR/split_fastqs/*_R2_*/$SEQS 1> $DIR/pandaseq/assembled/$SEQS.assembled.fastq 2> $DIR/pandaseq/stats/$SEQS.assembled.stats.txt.bz2";
-done < $DIR/seqs_list.txt > $DIR/parallel_scripts/pandaseq.sh
-cat $DIR/parallel_scripts/pandaseq.sh | parallel -j 10
-find $DIR/pandaseq/assembled -type f -size 0 -exec rm {} +
-ls $DIR/pandaseq/assembled/* | rev | cut -d "/" -f 1 | rev | cut -d "." -f 1 > $DIR/seqs_list.txt
+mkdir -p $DIRECTORY/pandaseq/assembled/../stats
+$PANDASEQ -T $CORES -o $OVERLAP -e $Q -N -F -d rbkfms -l $MINLENGTH -L $MAXLENGTH -f $RAWDAT_DIRECTORY/*_R1_* -r $RAWDAT_DIRECTORY/*_R2_* 1 > $DIRECTORY/pandaseq/assembled/sequences.assembled.fastq 2> $DIRECTORY/pandaseq/stats/sequences.assembled.stats.txt.bz2
+find $DIRECTORY/pandaseq/assembled -type f -size 0 -exec rm {} +
 ```
 <br>
 
-## 2.3 Read Quality Filter
+## 2.2 Read Quality Filter
 
 As an extra measure of quality control, we can use the RDP `SeqFilters` program to check the pandaseq outputs for quality reads. This is additionally important if you did not have to assemble pair-end reads befor this.
 
 ```{bash eval=FALSE}
-mkdir -p $DIR/quality_check/seqs_q$Q/../chimera_removal/../final_seqs
-while read SEQS;
-	do echo "java -jar $RDP/RDPTools/SeqFilters.jar -Q $Q -s $DIR/pandaseq/assembled/$SEQS.assembled.fastq -o $DIR/quality_check/seqs_q$Q -O $SEQS; 
-python $SCRIPTS/fastq_to_fasta.py $DIR/quality_check/seqs_q$Q/$SEQS/NoTag/NoTag_trimmed.fastq $DIR/quality_check/seqs_q$Q/$SEQS/$SEQS.fa";
-done < $DIR/seqs_list.txt > $DIR/parallel_scripts/qc.sh
-cat $DIR/parallel_scripts/qc.sh | parallel -j 20 --delay 2
-cat $DIR/quality_check/seqs_25/*/*.fa > $DIR/quality_check/chimera_removal/all_combined_q$Q.fa
+mkdir -p $DIRECTORY/quality_check/seqs_25/../chimera_removal/../final_seqs
+java -jar $RDP/RDPTools/SeqFilters.jar -Q $Q -s $DIRECTORY/pandaseq/assembled/sequences.assembled.fastq -o $DIRECTORY/quality_check/seqs_$Q -O sequences
+python $SCRIPTS/fastq_to_fasta.py $DIRECTORY/quality_check/seqs_$Q/sequences/NoTag/NoTag_trimmed.fastq $DIRECTORY/quality_check/seqs_$Q/sequences/sequences.fa
+```
+<br>
+
+## 2.3 Demultiplexing
+
+Sequencing files are very large. Running through them repeatedly with each program can take a while. Fortunately, we can process the files in smaller sets in parrallel to expedite the process. It depends on the facility that does the sequencing, but in most cases the fastq files are already demultiplexed. When this is the case, it is easy, becasue our job is already done. But sometimes they are not, so we need to demultiplex them ourselves, or find an alternative to make the files easier to process.
+<br><br>
+
+### Format Mapping File
+The first step we need to do is to format the mapping file to fit the RDP parser. 
+
+```{bash eval=FALSE}
+mkdir -p $DIRECTORY/parallel_scripts/../i_file/../demultiplex/parse_index/../bins/../empty_samples/../demultiplex_finalized; split -l 1000000 $RAWDAT_DIRECTORY/*_I*.fastq* $DIRECTORY/i_file/
+ls $DIRECTORY/i_file/* | rev | cut -d "/" -f 1 | sort -u | rev > $DIRECTORY/seqs_list.txt
+
+mkdir -p $DIRECTORY/demultiplex/parse_index/../bins/../empty_samples/../demultiplex_finalized
+
+perl $SCRIPTS/dos2unix.pl $MAPPING_FILE > $DIRECTORY/demultiplex/tag_file.txt
+python $SCRIPTS/MiSeq_rdptool_map_parser.py $DIRECTORY/demultiplex/tag_file.txt > $DIRECTORY/demultiplex/tag_file.tag
+```
+
+The mapping file needs to be in the order of barcode then sample ID.
+
+```{r engine='bash', comment='', echo=FALSE}
+head -7 misc/mapping.txt
+```
+
+And this needs to be the `tag_file.tag` for the pipeline. Sometimes the files may not be in the expected format and need a bit of work to get them in order.
+<br><br>
+
+### Create Bins
+
+Once the tag file is set, the RDP SeqFilter will create indices of which reads belong to which samples.
+
+```{bash eval=FALSE}
+while read I;
+	do mkdir $DIRECTORY/demultiplex/parse_index/$I
+	echo "java -jar $RDP/RDPTools/SeqFilters.jar --seq-file $DIRECTORY/i_file/$I --tag-file $DIRECTORY/demultiplex/tag_file.tag --outdir $DIRECTORY/demultiplex/parse_index/$I"
+done < $DIRECTORY/seqs_list.txt > $DIRECTORY/parallel_scripts/demultiplex.sh
+cat $DIRECTORY/parallel_scripts/demultiplex.sh | parallel -j $CORES
+
+awk '{print $2}' $DIRECTORY/demultiplex/tag_file.tag | tail -n +2 > seqs_list.txt
+while read LANE;
+	do echo "cat $DIRECTORY/demultiplex/parse_index/*/result_dir/$LANE/$LANE\_trimmed.fastq > $DIRECTORY/demultiplex/bins/$LANE\_trimmed.fastq"
+done < $DIRECTORY/seqs_list.txt > $DIRECTORY/parallel_scripts/cat_lanes.sh
+cat $DIRECTORY/parallel_scripts/cat_lanes.sh | parallel -j $CORES
+ls $DIRECTORY/demultiplex/bins/* | rev | cut -d "/" -f 1 | sort -u | rev | cut -d "_" -f 1 > $DIRECTORY/seqs_list.txt
+```
+<br>
+
+### Bin Reads
+
+When the bins are made, then the assembles reads can be placed into their corresponding sample.
+
+```{bash eval=FALSE}
+python $SCRIPTS/bin_reads.py $DIRECTORY/quality_check/seqs_$Q/sequences/sequences.fa $DIRECTORY/demultiplex/bins $DIRECTORY/demultiplex/demultiplex_finalized
+```
+
+Additionally a file `seqs_list.txt` will be created. This file contains the names of the split fastq files. The code uses a lot of relativistic commands, so it is possible that it does not properly work if your file has an unconventional name. If that is the case and you need assistance, feel free to conatact me. `seqs_list.txt` should appear as:
+
+<!-- ```{r engine='bash', comment='', echo=FALSE} -->
+<!-- head -6 misc/seqs_list.txt -->
+<!-- ``` -->
+<br>
+
+## 2.4 Create Master Read File
+
+A file with the concatenation of all the reads from each sample is made. This master file will be used to process chimeras and then to create OTUs/clusters. Once that is created, the reads from each bin will be mapped to match the master file.
+
+```{bash eval=FALSE}
+find $DIRECTORY/demultiplex/demultiplex_finalized -type f -size 0 -exec mv -t $DIRECTORY/demultiplex/empty_samples/ {} +
+ls $DIRECTORY/demultiplex/demultiplex_finalized/* | rev | cut -d "/" -f 1 | sort -u | rev | cut -d "_" -f 1 > $DIRECTORY/seqs_list.txt
+cat $DIRECTORY/demultiplex/demultiplex_finalized/* > $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q.fa
 ```

@@ -22,18 +22,19 @@ This pipeline was originally created by <a href="https://github.com/fandemonium"
   + [**Reference Database**](step_0.html#reference_database)
   + [**Mapping Files**](step_0.html#mapping_files)
 
-
 # [Your Shell Environment][step1]
 
   + [**Paths to Your Data**](step_1.html#11_paths_to_your_data)
   + [**Paths to Programs**](step_1.html#12_paths_to_programs)
   + [**Sequence Read Parameters**](step_1.html#13_sequence_read_paramters)
+  + [**Cores**](step_1.html#14_cores)
 
 # [Read Processing][step2]
 
-  + [**Splitting the Files**](step_2.html#21_splitting_the_files)
-  + [**Pair-End Read Assembly**](step_2.html#22_pair-end_read_assembly)
-  + [**Sequence Read Parameters**](step_2.html#23_read_quality_filter) 
+  + [**Pair-End Read Assembly**](step_2.html#21_pair-end_read_assembly)
+  + [**Read Quality Filter**](step_2.html#22_read_quality_filter)
+  + [**Demultiplexing**](step_2.html#23_demultiplexing)
+  + [**Create Master Read File**](step_2.html#24_create_master_read_file) 
 
 # [Chimera Removal][step3]
 

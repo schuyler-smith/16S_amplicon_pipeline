@@ -19,18 +19,20 @@ code{
 There are still an enormous number of reads in our dataset. Many of these reads are identical. It doesn't make sense to analyze the same sequence repeatedly, so we concatenate the duplicate reads. `derep_fulllength` removes duplicate sequences and sorts the sequences by length. 
 
 ```{bash eval=FALSE}
-$VSEARCH --threads 20 --derep_fulllength $DIR/quality_check/chimera_removal/all_combined_q$Q.fa --output $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort.fa --sizeout --minuniquesize 2
+$VSEARCH --threads $CORES --derep_fulllength $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q.fa --output $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2.fa --sizeout --minuniquesize 2
 ```
 <br>
 
 ## 3.2 Chimera Detection
+
+There is debate to whether de novo and refernce filtering is necessary. Most people seem to think that reference is superior and will get most of the reads that de novo would get anyways. The way this is written, it assumes both will be done. If you want to skip one, then the files need to 
 
 ### De Novo
 
 `uchime_denovo` evaluates each sequence without an outside reference base.
 
 ```{bash eval=FALSE}
-$VSEARCH --threads 20 --uchime_denovo $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort.fa --chimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_denovo.chimera --nonchimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_denovo.good
+$VSEARCH --threads $CORES --uchime_denovo $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2.fa --chimeras $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.chimera --nonchimeras $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.good
 ```
 
 ### Reference
@@ -38,13 +40,13 @@ $VSEARCH --threads 20 --uchime_denovo $DIR/quality_check/chimera_removal/all_com
 `uchime_ref` screens the selected chimera database for potential matches in your sequences.
 
 ```{bash eval=FALSE}
-$VSEARCH --threads 20 --uchime_ref $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_denovo.good --nonchimeras $DIR/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_denovo_ref.good --db $CHIMERA_DB
+$VSEARCH --threads $CORES --uchime_ref $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.good --nonchimeras $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo_ref.good --db $CHIMERA_DB
 ```
 
 ## 3.3 Sort for Clustering
 
 ```{bash eval=FALSE}
-$VSEARCH --threads 20 --derep_fulllength $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_denovo_ref.good --relabel "U_" --output $DIRECTORY/quality_check/chimera_removal/relabeled_denovo_ref.good
+$VSEARCH --threads $CORES --derep_fulllength $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo_ref.good --relabel "U_" --output $DIRECTORY/quality_check/chimera_removal/relabeled_denovo_ref.good
 ```
 
 
