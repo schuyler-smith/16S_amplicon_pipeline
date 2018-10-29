@@ -54,7 +54,7 @@ python $SCRIPTS/MiSeq_rdptool_map_parser.py $DIRECTORY/demultiplex/tag_file.txt 
 The mapping file needs to be in the order of barcode then sample ID.
 
 ```{r engine='bash', comment='', echo=FALSE}
-head -7 ../misc/mapping.txt
+head -7 snippets/mapping.txt
 ```
 
 And this needs to be the `tag_file.tag` for the pipeline. Sometimes the files may not be in the expected format and need a bit of work to get them in order.
