@@ -62,4 +62,4 @@ If you have any questions, feel free to contact me by e-mail at <sdsmith@iastate
 [step3]:step_3.html
 [step4]:step_4.html
 [hpc]:hpcc.html
-[pipie]:pipeline.html
+[pipe]:pipeline.html
