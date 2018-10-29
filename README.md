@@ -1,4 +1,4 @@
-# <a href="https://schuyler-smith.github.io/16S_amplicon_pipeline/site/" target="_blank">16S rRNA Sequencing Processing Pipeline</a>
+# <a href="https://schuyler-smith.github.io/16S_amplicon_pipeline/site/" target="_blank">16S rRNA-Sequencing Processing Pipeline</a>
 
 <a href="https://schuyler-smith.github.io/16S_amplicon_pipeline/site/" target="_blank">https://schuyler-smith.github.io/16S_amplicon_pipeline/site/</a>
 
