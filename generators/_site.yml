@@ -1,5 +1,5 @@
 name: "16s Amplicon Pipeline"
-output_dir: "site"
+output_dir: "../site"
 navbar:
   title: ""
   type: inverse
