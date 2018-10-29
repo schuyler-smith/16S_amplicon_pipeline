@@ -11,7 +11,7 @@
 
 
 
-<title>Your Shell Environment</title>
+<title>Help</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -71,7 +71,7 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="misc/styles.css" type="text/css" />
+<link rel="stylesheet" href="../misc/styles.css" type="text/css" />
 
 </head>
 
@@ -324,7 +324,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Your Shell Environment</h1>
+<h1 class="title toc-ignore">Help</h1>
 
 </div>
 
@@ -338,39 +338,23 @@ code{
 }
 </style>
 <p><br></p>
-<div id="paths-to-your-data" class="section level2">
-<h2>1.1 Paths to Your Data</h2>
-<p>To keep it simple, it’s easiest to put your data into a dedicated folder/directory and your raw fastq read sequence files into a subdirectory of that. However, if you are prone to deleting entire directories and don’t keep backups of your files, keep them separate.</p>
+<div id="troubleshooting" class="section level2">
+<h2>Troubleshooting</h2>
+<p>The only parameters that should be necessary to change are in the top section with</p>
 <pre class="bash"><code>DIRECTORY=/mnt/research/germs/Schuyler/Projects/X
 RAWDAT_DIRECTORY=$DIRECTORY/original
-MAPPING_FILE=$RAWDAT_DIRECTORY/map.txt</code></pre>
-<p>When you enter these in, they will only remain for the time that you have your terminal window open, so you will need to re-enter them if you stop partway through the pipeline and start again. <br><br></p>
-</div>
-<div id="paths-to-programs" class="section level2">
-<h2>1.2 Paths to Programs</h2>
-<p>The pipeline uses several programs, many of which are retained in the RDP package. To make the commands simple, it is easier to give these shortcut names to their paths.</p>
-<p><code>SCRIPTS</code> will be where the files from the <code>scripts</code> folder in this repository will be kept.<br> <code>RDP</code> is whereever you downloade and unpacked the RDP-tools.<br> <code>PANDASEQ</code> is a standalone package but was improved by the RDP group and so is contained within their package, this shortcut should got to the executable for the program.<br> <code>CHIMERA_DB</code> whatever database you are comparing your sequences to for chimera screening<br> <code>VSEARCH</code> vsearch is the free-ware version of usearch, this shortut should go to the executable of the program.<br> <code>CORES</code> is how many cpu-cores you want to run eac process on. If you don’t know how many this is.. I would leave it at 2.<br></p>
-<pre class="bash"><code>SCRIPTS=/mnt/research/germs/Schuyler/code
-RDP=/mnt/research/germs/softwares/RDPTools
-PANDASEQ=/mnt/research/germs/softwares/pandaseq/pandaseq
-VSEARCH=/mnt/research/germs/softwares/vsearch-2.5.0/bin/vsearch
-CDHIT=/mnt/research/germs/softwares/cdhit/
-CHIMERA_DB=/mnt/research/germs/databases/greengene/current_Bacteria_unaligned.fa</code></pre>
-<p><br></p>
-</div>
-<div id="sequence-read-parameters" class="section level2">
-<h2>1.3 Sequence Read Parameters</h2>
-<p>These parameters are used for combining pair-end reads and filtering out poor quality reads.</p>
-<p><code>OVERLAP</code> is the minimum number of bp your read-pairs need to overlap to assemble.<br> <code>MINLENGTH</code> all assembled reads shorter than this will be discarded.<br> <code>MAXLENGTH</code> all assembled reads longer than this will be discarded.<br> <code>Q</code> <span class="math inline">\(Q = -10\log_{10}(e)\)</span>, the minimum <a href="https://www.drive5.com/usearch/manual/quality_score.html" target="_blank">quality score</a> to keep reads.</p>
-<pre class="bash"><code>OVERLAP=10 
-MINLENGTH=210
+MAPPING_FILE=$RAWDAT_DIRECTORY/map.txt
+CORES=20
+
+OVERLAP=10
+MINLENGTH=210 
 MAXLENGTH=280
-Q=25</code></pre>
+Q=10
+CLUSTER=0.99</code></pre>
+<p>Feel free to explore other parameters within the code. As long as you have the raw data backed-up, there is no commands in this pipeline that should be able to make unfixable mistakes.</p>
 </div>
-<div id="cores" class="section level2">
-<h2>1.4 Cores</h2>
-<p>Several of the programs can use multiprocessing. Ones that do not, we can use parallele to run separate processes on multiple cores. Any PC can have anywhere from 2-8 cores typically. On the HPCC you can request a large number, I like 20. We use the variable <code>CORES</code> to let the script know how many are available.</p>
-<pre class="bash"><code>CORES=20</code></pre>
+<div id="contact" class="section level2">
+<h2>Contact</h2>
 </div>
 
 

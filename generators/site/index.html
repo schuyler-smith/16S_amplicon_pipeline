@@ -11,7 +11,7 @@
 
 
 
-<title>Files</title>
+<title>16s Amplicon Pipeline</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -71,7 +71,7 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="misc/styles.css" type="text/css" />
+<link rel="stylesheet" href="../misc/styles.css" type="text/css" />
 
 </head>
 
@@ -324,99 +324,68 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Files</h1>
+<h1 class="title toc-ignore">16s Amplicon Pipeline</h1>
 
 </div>
 
 
-<style type="text/css">
-code{
-  white-space: pre !important;
-  overflow-x: scroll !important;
-  word-break: keep-all !important;
-  word-wrap: initial !important;
-}
-</style>
-<p><br></p>
-<div id="sequence-files" class="section level2">
-<h2>Sequence Files</h2>
-<p>Sequence files come in 2 formats, FASTQ and FASTA. Raw reads will always come as fastq files, sometimes in compressed file formats. Some programs are written to be able to handle compressed files, but I find it’s easier to decompress the files to avoid any possible hang-ups. Compressed files typically have either a <code>.gz</code> or <code>.zip</code> file extension. <br><br></p>
-<div id="fastq" class="section level3">
-<h3>FASTQ</h3>
-<p>The fatq format always has 4 lines per read.</p>
+<p><strong>Downloads</strong>: <a href="https://mirror.las.iastate.edu/CRAN/" target="_blank">R</a> - <a href="https://www.python.org/" target="_blank">Python</a> - <a href="https://github.com/rdpstaff/RDPTools" target="_blank">RDP</a> - <a href="http://weizhongli-lab.org/cd-hit/" target="_blank">CD-Hit</a> - <a href="https://github.com/torognes/vsearch" target="_blank">vsearch</a> / <a href="http://www.drive5.com/usearch/" target="_blank">usearch</a> - <a href="http://www.gnu.org/software/parallel/" target="_blank">gparallel</a></p>
+<div id="why-use-this-pipeline" class="section level1">
+<h1>Why use this pipeline?</h1>
+<p>There are several complete pipelines that are well maintained and coumented; the two most popular being <a href="https://mothur.org/wiki/Main_Page" target="_blank">Mothur</a> and <a href="http://qiime.org/" target="_blank">Qiime</a>, with <a href="https://benjjneb.github.io/dada2/" target="_blank">DADA2</a> and <a href="https://github.com/biocore/deblur" target="_blank">deblur</a> gaining a lot of popularity recently. So there are many options. Mothur runs in its own environment; it has linear workflows and does not allow you to change the input/output file names. This can be confusing for users interested in intermediate steps of the workflow. Qiime is better about this; it is run using Python but hsa very fickle input requirements that can lead to a lot of lost time.</p>
+<p>This pipeline was originally created by <a href="https://github.com/fandemonium" target="_blank">Fan Yang</a> in the <a href="http://germslab.org/" target="_blank">GERMS-lab</a>. The purpose is that it allows much more control over every step, and is very transparent in how its workflow. She periodically updates <a href="https://github.com/germs-lab/amplicon_pipelines" target="_blank">her pipeline</a>, but I maintain my own version that I will update and annotate here.</p>
+</div>
+<div id="filesstep0" class="section level1">
+<h1><a href="step_0.html">Files</a></h1>
 <ul>
-<li><span class="citation">@Read</span> name</li>
-<li>Read sequence</li>
-<li>+some line I’ve never seen used</li>
-<li>Quality scores</li>
+<li><a href="step_0.html#sequence_files"><strong>Sequence Files</strong></a></li>
+<li><a href="step_0.html#reference_database"><strong>Reference Database</strong></a></li>
+<li><a href="step_0.html#mapping_files"><strong>Mapping Files</strong></a></li>
 </ul>
-<pre><code>@M04771:122:000000000-B62C2:1:1101:13253:1557 1:N:0:0
-TCCTTTTTTTTTTCTCTTTTTTCTTCTTTCCTTTTCTTCCCTCTTTCTTCTTCTTTTTTTTCCTTCTTTTTTTCCCTCCCTTTTCTTCCCTTTTTTTTTTCCTTTTTTCCTTTTTTTCTTTTTTTTTTTTTTTTTTTTTTTTTTTTCTTTT
-+
-&gt;&gt;&gt;11311&gt;@00A012BEF1AABEE22DA21DDFF2BF210B0B112DA2DF2DB111&gt;&gt;E01@@11@1@EE?011B0//011BBF12101111&lt;///&lt;/011?&lt;11&lt;0&lt;?1&lt;1&lt;-@0&lt;=000&lt;&lt;--------9@---9-9--99-///;9
-@M04771:122:000000000-B62C2:1:1101:16150:1745 1:N:0:0
-TACGGAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCGCGTAGGCGGTCTGGTCAGTCAGATGTGAAAGCCCCGGGCTCAACCTGGGAATTGCATTTGATACTGCCAGACTCGAGTGTGGTAGAGGGAAGTGGAATTCCGAGT
-+
-AAAA?1AD?AAA1FGGGGE?0BGFF00FFGAGFFGEEGGAGHFEA/AE&gt;EEEBEGE/E00BGDGG&gt;1B1BFGGFFFFECEE/&lt;ECGC1CG&lt;F00FA1?FDGBFGG&gt;FFFHHG1&lt;110?F1?.CGA&gt;1AFFFBGH?.&lt;AGBF0DDC&lt;G/.:C
-@M04771:122:000000000-B62C2:1:1101:14494:1756 1:N:0:0
-TACGGAGGGGGTTAGCGTTGTTCGGAATTACTGGGCGTAAAGCGCGCGTAGGCGGATTATTCAGTCAGAGGTGAAATCCCAGGGCTCAACCCTGGAACTGCCTTTGATACTGCTAGTCTTGAGTTCGAGAGAGGTGAGTGGAATTCCGAGT
-+
-A1AA11AD@1&gt;&gt;AAGGEGEEFFHFEC/FGFBGFFGEEGC?/GEE&gt;/&gt;EEEEGFEE/&gt;E12BF2GGD1B11?GHGB&gt;BGCC11/CCHE11G?&lt;00?011F&lt;FGGGH1??1FH11F11&gt;GHHF11GGD..0.@.?CGA0.DDEEC;C:C/.:;</code></pre>
-<p><br></p>
 </div>
-<div id="fasta" class="section level3">
-<h3>FASTA</h3>
-<p>The fasta format has two lines per read.</p>
+<div id="your-shell-environmentstep1" class="section level1">
+<h1><a href="step_1.html">Your Shell Environment</a></h1>
 <ul>
-<li>&gt;Read name</li>
-<li>Read sequence</li>
+<li><a href="step_1.html#11_paths_to_your_data"><strong>Paths to Your Data</strong></a></li>
+<li><a href="step_1.html#12_paths_to_programs"><strong>Paths to Programs</strong></a></li>
+<li><a href="step_1.html#13_sequence_read_paramters"><strong>Sequence Read Parameters</strong></a></li>
+<li><a href="step_1.html#14_cores"><strong>Cores</strong></a></li>
 </ul>
-<pre><code>&gt;M04771:122:000000000-B62C2:1:1101:13253:1557 1:N:0:0
-TCCTTTTTTTTTTCTCTTTTTTCTTCTTTCCTTTTCTTCCCTCTTTCTTCTTCTTTTTTTTCCTTCTTTTTTTCCCTCCCTTTTCTTCCCTTTTTTTTTTCCTTTTTTCCTTTTTTTCTTTTTTTTTTTTTTTTTTTTTTTTTTTTCTTTT
-&gt;M04771:122:000000000-B62C2:1:1101:16150:1745 1:N:0:0
-TACGGAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCGCGTAGGCGGTCTGG
-TCAGTCAGATGTGAAAGCCCCGGGCTCAACCTGGGAATTGCATTTGATACTGCCAGACTC
-GAGTGTGGTAGAGGGAAGTGGAATTCCGAGT
-&gt;M04771:122:000000000-B62C2:1:1101:14494:1756 1:N:0:0
-TACGGAGGGGGTTAGCGTTGTTCGGAATTACTGGGCGTAAAGCGCGCGTAGGCGGATTATTCAGTCAGAGGTGAAATCCCAGGGCTCAACCCTGGAACTGCCTTTGATACTGCTAGTCTTGAGTTCGAGAGAGGTGAGTGGAATTCCGAGT</code></pre>
-<p>Though technically FASTA formay is 2 lines per sequence, you may notice that the actual sequence for the second read here is on more than 1 line. Really, programs that use FASTA files check for the ‘&gt;’ in the read name line to denote a new sequence.. But for best practice, use 2-line format. <br><br></p>
 </div>
+<div id="read-processingstep2" class="section level1">
+<h1><a href="step_2.html">Read Processing</a></h1>
+<ul>
+<li><a href="step_2.html#21_pair-end_read_assembly"><strong>Pair-End Read Assembly</strong></a></li>
+<li><a href="step_2.html#22_read_quality_filter"><strong>Read Quality Filter</strong></a></li>
+<li><a href="step_2.html#23_demultiplexing"><strong>Demultiplexing</strong></a></li>
+<li><a href="step_2.html#24_create_master_read_file"><strong>Create Master Read File</strong></a></li>
+</ul>
 </div>
-<div id="reference-database" class="section level2">
-<h2>Reference Database</h2>
-<p>The reference database is typically in fasta format, and is used for two purposes in this pipeline. First, it is used to compare the reads to for chimera screening. Second, it is used to classify the read clusters as belonging to particular taxa. The most commonly used databases are <a href="https://www.arb-silva.de/" target="_blank">Silva</a>, <a href="http://greengenes.secondgenome.com/" target="_blank">GreenGenes</a>, and the <a href="https://rdp.cme.msu.edu/" target="_blank">RDP</a>.</p>
-<pre><code>&gt;S000494589 uncultured bacterium; YRM60L1D06060904  Lineage=Root;rootrank;Bacteria;domain;&quot;Actinobacteria&quot;;phylum;Actinobacteria;class;Acidimicrobidae;subclass;Acidimicrobiales;order;&quot;Acidimicrobineae&quot;;suborder;Acidimicrobiaceae;family;Acidimicrobium;genus
-gcggcgtgctacacatgcagtcgtacgcggtggcacaccgagtggcgaacgggtgcgtaacacgtgaggaacctaccccg
-aagtgggggataacaccgggaaaccggtgctaataccgcatacgctccccggaccgcatggtccagggagcaaagcctcc
-gggcgcttcgggacggcctcgcggcctatcagcttgttggtggggtaacggcccaccaaggcgacgacgggtagctggtc
-tgagaggacgatcagccacactgggactgagacacggcccagactcctacgggaggcagcagtggggaatattgcgcaat
-gggcgaaagcctgacgcagcaacgccgcgtggaggacgaaggccttcgggttgtaaactcctttcagcagggacgaaact
-gacggtacctgcagaagaagccccggctaactacgtgccagcagccgcggtaag</code></pre>
-<p><br></p>
+<div id="chimera-removalstep3" class="section level1">
+<h1><a href="step_3.html">Chimera Removal</a></h1>
+<ul>
+<li><a href="step_3.html#31_dereplicating_and_sorting_reads"><strong>Dereplicating and Sorting Reads</strong></a></li>
+<li><a href="step_3.html#32_chimera_detection"><strong>Chimera Detection</strong></a></li>
+<li><a href="step_3.html#33_sort_for_clustering"><strong>Sort for Clustering</strong></a></li>
+</ul>
 </div>
-<div id="mapping-files" class="section level2">
-<h2>Mapping Files</h2>
-<p>These files are used to match the barcodes of multiplexed reads to their source samples. Depending on the sequencing facility there may by 2 files, a mapping file and and I file. The mapping file is used to match the barcode the sample.</p>
-<pre><code>#SampleID   BarcodeSequence LinkerPrimer    Description     
-ATD1    TCAGCCTCAGCC    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A1      
-ATD2    TGCAGGGAACCG    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A2      
-ATD3    CAGCGCGGCTAG    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A3      
-ATD4    ATGGACCTAGCT    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A4      
-ATD5    CTAGCCCGTTCG    GTGTGYCAGCMGCCGCGGTAA   E_Quiroz_plate1_A5      </code></pre>
-<p>The I file matches the read to the barcode.</p>
-<pre><code>@M04771:122:000000000-B62C2:1:1101:13253:1557 1:N:0:0
-TTTTTTTTTTCT
-+
-1111&gt;33B3B13
-@M04771:122:000000000-B62C2:1:1101:16150:1745 1:N:0:0
-TGGGTTAACACA
-+
-&gt;111&gt;&gt;11B3B1
-@M04771:122:000000000-B62C2:1:1101:14494:1756 1:N:0:0
-TTTCTTTTCTTT
-+
-111113313B33</code></pre>
-<p><br></p>
+<div id="otu-callingstep4" class="section level1">
+<h1><a href="step_4.html">OTU Calling</a></h1>
+<ul>
+<li><a href="step_4.html#41_clustering"><strong>Clustering</strong></a></li>
+<li><a href="step_4.html#42_sample_mapping"><strong>Sample Mapping</strong></a></li>
+<li><a href="step_4.html#43_taxa_classification"><strong>Taxa Classification</strong></a></li>
+</ul>
+</div>
+<div id="hpcchpc" class="section level1">
+<h1><a href="hpcc.html">HPCC</a></h1>
+</div>
+<div id="pipelinepipe" class="section level1">
+<h1><a href="pipeline.html">Pipeline</a></h1>
+</div>
+<div id="questions" class="section level1">
+<h1>Questions</h1>
+<p>If you have any questions, feel free to contact me by e-mail at <a href="mailto:sdsmith@iastate.edu">sdsmith@iastate.edu</a></p>
 </div>
 
 

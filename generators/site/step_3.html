@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>Chimera Removal</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -71,7 +71,7 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="misc/styles.css" type="text/css" />
+<link rel="stylesheet" href="../misc/styles.css" type="text/css" />
 
 </head>
 
@@ -324,15 +324,44 @@ div.tocify {
 
 
 
+<h1 class="title toc-ignore">Chimera Removal</h1>
 
 </div>
 
 
-<div id="metagenome_amplicon_pipeline" class="section level1">
-<h1>metagenome_amplicon_pipeline</h1>
-<div id="just-some-different-pipelines-i-use-for-16s-analysis-and-such" class="section level2">
-<h2>Just some different pipelines I use for 16s analysis and such</h2>
+<style type="text/css">
+code{
+  white-space: pre !important;
+  overflow-x: scroll !important;
+  word-break: keep-all !important;
+  word-wrap: initial !important;
+}
+</style>
+<p><br></p>
+<p><code>vsearch</code> is the primary tool we use for chimera detection and removal. <br><br></p>
+<div id="dereplicating-and-sorting-reads" class="section level2">
+<h2>3.1 Dereplicating and Sorting Reads</h2>
+<p>There are still an enormous number of reads in our dataset. Many of these reads are identical. It doesn’t make sense to analyze the same sequence repeatedly, so we concatenate the duplicate reads. <code>derep_fulllength</code> removes duplicate sequences and sorts the sequences by length.</p>
+<pre class="bash"><code>$VSEARCH --threads $CORES --derep_fulllength $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q.fa --output $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2.fa --sizeout --minuniquesize 2</code></pre>
+<p><br></p>
 </div>
+<div id="chimera-detection" class="section level2">
+<h2>3.2 Chimera Detection</h2>
+<p>There is debate to whether de novo and refernce filtering is necessary. Most people seem to think that reference is superior and will get most of the reads that de novo would get anyways. The way this is written, it assumes both will be done. If you want to skip one, then the files need to</p>
+<div id="de-novo" class="section level3">
+<h3>De Novo</h3>
+<p><code>uchime_denovo</code> evaluates each sequence without an outside reference base.</p>
+<pre class="bash"><code>$VSEARCH --threads $CORES --uchime_denovo $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2.fa --chimeras $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.chimera --nonchimeras $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.good</code></pre>
+</div>
+<div id="reference" class="section level3">
+<h3>Reference</h3>
+<p><code>uchime_ref</code> screens the selected chimera database for potential matches in your sequences.</p>
+<pre class="bash"><code>$VSEARCH --threads $CORES --uchime_ref $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo.good --nonchimeras $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo_ref.good --db $CHIMERA_DB</code></pre>
+</div>
+</div>
+<div id="sort-for-clustering" class="section level2">
+<h2>3.3 Sort for Clustering</h2>
+<pre class="bash"><code>$VSEARCH --threads $CORES --derep_fulllength $DIRECTORY/quality_check/chimera_removal/all_combined_q$Q\_unique_sort_min2_denovo_ref.good --relabel &quot;U_&quot; --output $DIRECTORY/quality_check/chimera_removal/relabeled_denovo_ref.good</code></pre>
 </div>
 
 

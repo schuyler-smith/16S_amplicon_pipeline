@@ -28,8 +28,8 @@ output:
     theme: cerulean
     highlight: textmate
     include:
-      after_body: misc/footer.html
-    css: misc/styles.css
+      after_body: ../misc/footer.html
+    css: ../misc/styles.css
     toc: true
     toc_float: 
       collapsed: false
