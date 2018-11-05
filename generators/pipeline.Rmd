@@ -23,7 +23,7 @@ CHIMERA_DB=/mnt/research/germs/databases/greengene/current_Bacteria_unaligned.fa
 #pip install --user Biopython
 
 
-DIRECTORY=/mnt/research/germs/Schuyler/Projects/Xuewei
+DIRECTORY=/mnt/research/germs/Schuyler/Projects/X
 RAWDAT_DIRECTORY=$DIRECTORY/original
 MAPPING_FILE=$RAWDAT_DIRECTORY/map.txt
 CORES=20
@@ -37,7 +37,7 @@ CLUSTER=99
 
 
 mkdir -p $DIRECTORY/pandaseq/assembled/../stats
-$PANDASEQ -T $CORES -o $OVERLAP -e $Q -N -F -d rbkfms -l $MINLENGTH -L $MAXLENGTH -f $RAWDAT_DIRECTORY/*_R1_* -r $RAWDAT_DIRECTORY/*_R2_* 1 > $DIRECTORY/pandaseq/assembled/sequences.assembled.fastq 2> $DIRECTORY/pandaseq/stats/sequences.assembled.stats.txt.bz2
+$PANDASEQ -T $CORES -o $OVERLAP -N -F -d rbkfms -l $MINLENGTH -L $MAXLENGTH -f $RAWDAT_DIRECTORY/*_R1_* -r $RAWDAT_DIRECTORY/*_R2_* 1 > $DIRECTORY/pandaseq/assembled/sequences.assembled.fastq 2> $DIRECTORY/pandaseq/stats/sequences.assembled.stats.txt.bz2
 find $DIRECTORY/pandaseq/assembled -type f -size 0 -exec rm {} +
 mkdir -p $DIRECTORY/quality_check/seqs_25/../chimera_removal/../final_seqs
 java -jar $RDP/RDPTools/SeqFilters.jar -Q $Q -s $DIRECTORY/pandaseq/assembled/sequences.assembled.fastq -o $DIRECTORY/quality_check/seqs_$Q -O sequences

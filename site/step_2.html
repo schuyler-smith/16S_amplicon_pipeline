@@ -342,7 +342,7 @@ code{
 <h2>2.1 Pair-End Read Assembly</h2>
 <p>If you have pair-end reads, reads that were sequenced from both forward and reverse directions, then you need to combine them before processing through the rest of the pipeline. Our tool of choice for this is <a href="https://github.com/neufeld/pandaseq" target="_blank">pandaseq</a>, which is included in RDP-tools.</p>
 <pre class="bash"><code>mkdir -p $DIRECTORY/pandaseq/assembled/../stats
-$PANDASEQ -T $CORES -o $OVERLAP -e $Q -N -F -d rbkfms -l $MINLENGTH -L $MAXLENGTH -f $RAWDAT_DIRECTORY/*_R1_* -r $RAWDAT_DIRECTORY/*_R2_* 1 &gt; $DIRECTORY/pandaseq/assembled/sequences.assembled.fastq 2&gt; $DIRECTORY/pandaseq/stats/sequences.assembled.stats.txt.bz2
+$PANDASEQ -T $CORES -o $OVERLAP -N -F -d rbkfms -l $MINLENGTH -L $MAXLENGTH -f $RAWDAT_DIRECTORY/*_R1_* -r $RAWDAT_DIRECTORY/*_R2_* 1 &gt; $DIRECTORY/pandaseq/assembled/sequences.assembled.fastq 2&gt; $DIRECTORY/pandaseq/stats/sequences.assembled.stats.txt.bz2
 find $DIRECTORY/pandaseq/assembled -type f -size 0 -exec rm {} +</code></pre>
 <p><br></p>
 </div>
